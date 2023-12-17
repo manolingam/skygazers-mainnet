@@ -105,3 +105,22 @@ a {
     color-scheme: dark;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #59342b;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #59342b;
+}
