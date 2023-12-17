@@ -12,7 +12,7 @@ export default function Root() {
   const { address } = useAccount();
 
   return (
-    <Flex direction='column' fontFamily='gatwick'>
+    <Flex direction='column' fontFamily='gatwick' maxW='100rem' mx='auto'>
       {address ? <Connected /> : <Disconnected />}
       <Footer />
     </Flex>
