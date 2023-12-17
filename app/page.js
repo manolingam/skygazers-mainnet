@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Image as ChakraImage, Button } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import { Disconnected } from '@/views/Disconnected';
 import { Footer } from '@/shared/Footer';

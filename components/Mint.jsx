@@ -11,7 +11,11 @@ import {
 import { Divider } from '@chakra-ui/react';
 import { Stat, StatLabel, StatNumber } from '@chakra-ui/react';
 
+import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
+
 export const Mint = () => {
+  const { gazersRemaining, nextPrice } = useCurveSaleMinter();
+
   return (
     <Flex direction='row' justifyContent='space-between'>
       <SimpleGrid columns='3' gap='4'>
@@ -58,7 +62,7 @@ export const Mint = () => {
             current price / gazer
           </StatLabel>
           <StatNumber fontSize='20px' color='#59342B'>
-            0.12 ETH
+            {nextPrice} ETH
           </StatNumber>
         </Stat>
         <Stat>
@@ -66,7 +70,7 @@ export const Mint = () => {
             gazers left at current price
           </StatLabel>
           <StatNumber fontSize='20px' color='#59342B'>
-            51
+            {gazersRemaining}
           </StatNumber>
         </Stat>
       </Flex>
