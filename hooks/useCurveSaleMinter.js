@@ -13,7 +13,7 @@ export function useCurveSaleMinter() {
   const [nextPrice, setNextPrice] = useState(0);
 
   const { data: price } = useContractRead({
-    address: CURVE_SALE_MINTER_CONTRACTS[chain.id],
+    address: CURVE_SALE_MINTER_CONTRACTS[chain?.id],
     abi: CURVE_SALE_MINTER_ABI,
     functionName: 'p',
     cacheOnBlock: true,
@@ -32,7 +32,7 @@ export function useCurveSaleMinter() {
 
   // returns the current index in this curveminter
   const { data: currentIndex } = useContractRead({
-    address: CURVE_SALE_MINTER_CONTRACTS[chain.id],
+    address: CURVE_SALE_MINTER_CONTRACTS[chain?.id],
     abi: CURVE_SALE_MINTER_ABI,
     functionName: 'currentIndex',
     cacheOnBlock: true,

@@ -5,46 +5,187 @@ import {
   Text,
   Image as ChakraImage,
   SimpleGrid,
-  Button
+  Button,
+  Link as ChakraLink,
+  Stat,
+  StatLabel,
+  StatNumber,
+  Divider
 } from '@chakra-ui/react';
-
-import { Divider } from '@chakra-ui/react';
-import { Stat, StatLabel, StatNumber } from '@chakra-ui/react';
+import { useState, useEffect } from 'react';
+import { useContractRead, useNetwork } from 'wagmi';
 
 import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
+import { SKYGAZERS } from '@/data/traitsMap';
+import { Pagination } from '@/shared/Pagination';
+import { getAccountString } from '@/utils/helpers';
+import { SKYGAZERS_NFT_CONTRACTS } from '@/utils/constants';
+import SKYGAZER_ABI from '../abi/SkyGazer.json';
+import Icons from '@/Icons';
+
+const ITEMS_PER_PAGE = 50;
+
+const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
+  const { chain } = useNetwork();
+
+  const { data: address, isError } = useContractRead({
+    address: SKYGAZERS_NFT_CONTRACTS[chain?.id],
+    abi: SKYGAZER_ABI,
+    functionName: 'ownerOf',
+    cacheOnBlock: true,
+    args: [SKYGAZERS.indexOf(item)]
+  });
+
+  return (
+    <Flex key={item} direction='column' mb='2rem'>
+      <Flex position='relative' mb='10px'>
+        <ChakraImage src='/placeholder.png' />
+        {address ? (
+          <Text
+            position='absolute'
+            bottom='0'
+            right='0'
+            mb='5px'
+            mr='5px'
+            px='12px'
+            py='6px'
+            bg='white'
+            fontSize='12px'
+          >
+            SOLD
+          </Text>
+        ) : (
+          <Button
+            position='absolute'
+            bottom='0'
+            right='0'
+            mb='5px'
+            mr='5px'
+            p='12px'
+            borderRadius='50%'
+            bg='white'
+            cursor='default'
+            _hover={{
+              opacity: `${
+                selectedGazers.includes(SKYGAZERS.indexOf(item)) ? 1 : 0.6
+              }`
+            }}
+            opacity={selectedGazers.includes(SKYGAZERS.indexOf(item)) ? 1 : 0.6}
+            w='36px'
+          >
+            <Icons.Vmark />
+          </Button>
+        )}
+      </Flex>
+      <Flex
+        direction='row'
+        alignItems='baseline'
+        justifyContent='space-between'
+        my='auto'
+      >
+        <Text color='#59342b' fontWeight='bold' fontSize='12px'>
+          #{SKYGAZERS.indexOf(item)}
+        </Text>
+        {!isError ? (
+          <Text fontSize='12px' color='#59342B' opacity='0.6'>
+            minted by{' '}
+            <ChakraLink textDecoration='underline' href=''>
+              {getAccountString(address || '')}
+            </ChakraLink>
+          </Text>
+        ) : (
+          <Button
+            borderRadius='18px'
+            bg={
+              selectedGazers.includes(SKYGAZERS.indexOf(item))
+                ? 'transparent'
+                : '#FFAB7B'
+            }
+            color='#59342b'
+            textDecoration={
+              selectedGazers.includes(SKYGAZERS.indexOf(item))
+                ? 'underline'
+                : 'none'
+            }
+            py='10px'
+            px='25px'
+            fontSize='14px'
+            _hover={
+              selectedGazers.includes(SKYGAZERS.indexOf(item))
+                ? { bg: 'transparent' }
+                : { opacity: 0.9 }
+            }
+            onClick={() => {
+              if (selectedGazers.includes(SKYGAZERS.indexOf(item))) {
+                setSelectedGazers(
+                  selectedGazers.filter(
+                    (_gazer) => _gazer !== SKYGAZERS.indexOf(item)
+                  )
+                );
+              } else {
+                setSelectedGazers((prev) => [...prev, SKYGAZERS.indexOf(item)]);
+              }
+            }}
+          >
+            {selectedGazers.includes(SKYGAZERS.indexOf(item))
+              ? 'remove from cart'
+              : '+ add to cart'}
+          </Button>
+        )}
+      </Flex>
+    </Flex>
+  );
+};
 
 export const Mint = () => {
   const { gazersRemaining, nextPrice } = useCurveSaleMinter();
 
+  const [selectedGazers, setSelectedGazers] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const paginate = (_items, _pageNumber) => {
+    _pageNumber ? setCurrentPage(_pageNumber) : null;
+    const indexOfLastRecord = currentPage * ITEMS_PER_PAGE;
+    const indexOfFirstRecord = indexOfLastRecord - ITEMS_PER_PAGE;
+    const currentRecords = _items.slice(indexOfFirstRecord, indexOfLastRecord);
+    setCurrentItems(currentRecords);
+  };
+
+  const cropRecords = (_items, _page) => {
+    setTotalPages(Math.ceil(_items.length / ITEMS_PER_PAGE));
+    paginate(_items, _page);
+  };
+
+  useEffect(() => {
+    cropRecords(SKYGAZERS);
+  }, [currentPage]);
+
+  useEffect(() => {
+    cropRecords(SKYGAZERS, 1);
+  }, []);
+
   return (
     <Flex direction='row' justifyContent='space-between'>
-      <SimpleGrid columns='3' gap='4'>
-        {Array.from(Array(10).keys()).map((item) => (
-          <Flex key={item} direction='column' w='250px' mb='2rem'>
-            <ChakraImage src='/placeholder.png' w='250px' />
-            <Flex
-              direction='row'
-              alignItems='baseline'
-              justifyContent='space-between'
-              mt='5px'
-            >
-              <Text color='#59342b' fontWeight='bold' fontSize='12px'>
-                #0001
-              </Text>
-              <Button
-                borderRadius='18px'
-                bg='#FFAB7B'
-                color='#59342b'
-                py='10px'
-                px='25px'
-                fontSize='14px'
-              >
-                Add to cart
-              </Button>
-            </Flex>
-          </Flex>
-        ))}
-      </SimpleGrid>
+      <Flex direction='column' mr='1rem'>
+        <SimpleGrid columns='3' gap='4'>
+          {currentItems.length > 0 &&
+            currentItems.map((item) => (
+              <Gazer
+                item={item}
+                selectedGazers={selectedGazers}
+                setSelectedGazers={setSelectedGazers}
+              />
+            ))}
+        </SimpleGrid>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
+      </Flex>
       <Flex direction='column' maxH='250px'>
         <Button
           border='1px solid #FF5C00'
@@ -52,9 +193,9 @@ export const Mint = () => {
           color='#FF5C00'
           fontSize='16px'
           bg='white'
-          isDisabled
+          isDisabled={selectedGazers.length == 0}
         >
-          Show Cart (0)
+          show cart ({selectedGazers.length})
         </Button>
         <Divider h='1px' w='100%' bg='#59342b' my='2rem' />
         <Stat>
