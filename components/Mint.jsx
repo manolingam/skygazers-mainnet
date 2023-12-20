@@ -28,8 +28,9 @@ const ITEMS_PER_PAGE = 50;
 
 const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
   const { chain } = useNetwork();
+  const { address } = useAccount();
 
-  const { data: address, isError } = useContractRead({
+  const { data: owner, isError } = useContractRead({
     address: SKYGAZERS_NFT_CONTRACTS[chain?.id],
     abi: SKYGAZER_ABI,
     functionName: 'ownerOf',
@@ -41,7 +42,7 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
     <Flex key={item} direction='column' mb='2rem'>
       <Flex position='relative' mb='10px'>
         <ChakraImage src='/placeholder.png' w='100%' />
-        {address ? (
+        {owner ? (
           <Text
             position='absolute'
             bottom='0'
@@ -87,11 +88,11 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
         <Text color='#59342b' fontWeight='bold' fontSize='12px'>
           #{SKYGAZERS.indexOf(item)}
         </Text>
-        {!isError ? (
+        {!isError && address ? (
           <Text fontSize='12px' color='#59342B' opacity='0.6'>
             minted by{' '}
             <ChakraLink textDecoration='underline' href=''>
-              {getAccountString(address || '')}
+              {getAccountString(owner || '')}
             </ChakraLink>
           </Text>
         ) : (
@@ -127,6 +128,7 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
                 setSelectedGazers((prev) => [...prev, SKYGAZERS.indexOf(item)]);
               }
             }}
+            isDisabled={!address}
           >
             {selectedGazers.includes(SKYGAZERS.indexOf(item))
               ? 'remove from cart'
