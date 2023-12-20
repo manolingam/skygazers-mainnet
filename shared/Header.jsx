@@ -1,6 +1,7 @@
 'use client';
 
-import { Flex, Button } from '@chakra-ui/react';
+import { Flex, Button, Image as ChakraImage } from '@chakra-ui/react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAccount, useDisconnect } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 
@@ -11,17 +12,71 @@ export const Header = () => {
   const { disconnect } = useDisconnect();
   const { open } = useWeb3Modal();
 
+  const pathname = usePathname();
+  const router = useRouter();
+
   return (
-    <>
-      {!address ? (
-        <Flex
-          pt='2rem'
-          px='3rem'
-          w='100%'
-          direction='row'
-          alignItems='center'
-          justifyContent='flex-end'
+    <Flex
+      direction='row'
+      alignItems='flex-start'
+      justifyContent='space-between'
+      py='4rem'
+      px='3rem'
+    >
+      <Flex direction='row' w='80%'>
+        <ChakraImage src='/logo.svg' w='150px' mr='2rem' />
+        <Button
+          textTransform='uppercase'
+          fontSize='24px'
+          mt='auto'
+          bg='transparent'
+          _hover={{ bg: 'transparent', textDecoration: 'underline' }}
+          color='#FF5C00'
+          opacity={pathname === '/' ? '1' : '0.7'}
+          onClick={() => {
+            pathname !== '/' && router.push('/');
+          }}
         >
+          Home
+        </Button>
+        <Button
+          textTransform='uppercase'
+          fontSize='24px'
+          mt='auto'
+          color='#FF5C00'
+          bg='transparent'
+          _hover={{ bg: 'transparent', textDecoration: 'underline' }}
+          opacity={pathname === '/mint' ? '1' : '0.7'}
+          onClick={() => {
+            pathname !== '/mint' && router.push('/mint');
+          }}
+        >
+          Mint
+        </Button>
+        <Button
+          textTransform='uppercase'
+          fontSize='24px'
+          mt='auto'
+          color='#FF5C00'
+          bg='transparent'
+          isDisabled
+        >
+          Lore
+        </Button>
+        <Button
+          textTransform='uppercase'
+          fontSize='24px'
+          mt='auto'
+          color='#FF5C00'
+          bg='transparent'
+          isDisabled
+        >
+          Proposals
+        </Button>
+      </Flex>
+
+      {!address ? (
+        <Flex direction='row' alignItems='center' justifyContent='flex-end'>
           <Button
             bg='white'
             borderRadius='0'
@@ -30,20 +85,12 @@ export const Header = () => {
             fontSize='12px'
             textTransform='uppercase'
             onClick={() => open()}
-            mt='auto'
           >
             Connect wallet
           </Button>
         </Flex>
       ) : (
-        <Flex
-          pt='2rem'
-          px='3rem'
-          w='100%'
-          direction='row'
-          alignItems='center'
-          justifyContent='flex-end'
-        >
+        <Flex direction='row' alignItems='center' justifyContent='flex-end'>
           <Button
             bg='white'
             borderRadius='0'
@@ -52,12 +99,11 @@ export const Header = () => {
             fontSize='12px'
             textTransform='uppercase'
             onClick={() => disconnect()}
-            mt='auto'
           >
             {`0 SST | ${getAccountString(address)}`}
           </Button>
         </Flex>
       )}
-    </>
+    </Flex>
   );
 };

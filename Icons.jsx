@@ -76,4 +76,36 @@ const Vmark = ({
   </svg>
 );
 
-export default { Copyicon, Arrownext, Arrowprev, Vmark };
+const Xmark = ({
+  width = '22',
+  height = '21',
+  fill = '#59342B',
+  opacity = '1'
+}) => (
+  <svg
+    viewBox='0 0 22 21'
+    width={width}
+    height={height}
+    fill={fill}
+    opacity={opacity}
+  >
+    <line
+      x1='19.2929'
+      y1='19.7071'
+      x2='0.908117'
+      y2='1.32233'
+      stroke={fill}
+      strokeWidth='2'
+    />
+    <line
+      x1='2.29289'
+      y1='19.6777'
+      x2='20.6777'
+      y2='1.29288'
+      stroke={fill}
+      strokeWidth='2'
+    />
+  </svg>
+);
+
+export default { Copyicon, Arrownext, Arrowprev, Vmark, Xmark };

@@ -13,7 +13,7 @@ import {
   Divider
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { useContractRead, useNetwork } from 'wagmi';
+import { useContractRead, useNetwork, useAccount } from 'wagmi';
 
 import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
 import { SKYGAZERS } from '@/data/traitsMap';
@@ -22,6 +22,7 @@ import { getAccountString } from '@/utils/helpers';
 import { SKYGAZERS_NFT_CONTRACTS } from '@/utils/constants';
 import SKYGAZER_ABI from '../abi/SkyGazer.json';
 import Icons from '@/Icons';
+import { Cart } from './Cart';
 
 const ITEMS_PER_PAGE = 50;
 
@@ -39,7 +40,7 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
   return (
     <Flex key={item} direction='column' mb='2rem'>
       <Flex position='relative' mb='10px'>
-        <ChakraImage src='/placeholder.png' />
+        <ChakraImage src='/placeholder.png' w='100%' />
         {address ? (
           <Text
             position='absolute'
@@ -138,9 +139,12 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
 };
 
 export const Mint = () => {
+  const { address } = useAccount();
+
   const { gazersRemaining, nextPrice } = useCurveSaleMinter();
 
   const [selectedGazers, setSelectedGazers] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [currentItems, setCurrentItems] = useState([]);
@@ -168,8 +172,13 @@ export const Mint = () => {
   }, []);
 
   return (
-    <Flex direction='row' justifyContent='space-between'>
-      <Flex direction='column' mr='1rem'>
+    <Flex direction='row' w='100%'>
+      <Flex
+        w='100%'
+        direction='column'
+        justifyContent='space-between'
+        mr='3rem'
+      >
         <SimpleGrid columns='3' gap='4'>
           {currentItems.length > 0 &&
             currentItems.map((item) => (
@@ -186,14 +195,25 @@ export const Mint = () => {
           setCurrentPage={setCurrentPage}
         />
       </Flex>
-      <Flex direction='column' maxH='250px'>
+      <Flex direction='column' maxH='400px' position='sticky'>
+        {!address && (
+          <Flex bg='#DDB59866' p='2rem' mb='2rem'>
+            <Text fontSize='14px' textAlign='center'>
+              Connect wallet to mint
+            </Text>
+          </Flex>
+        )}
         <Button
-          border='1px solid #FF5C00'
+          border='1px solid'
           borderRadius='30px'
           color='#FF5C00'
           fontSize='16px'
           bg='white'
+          py='25px'
           isDisabled={selectedGazers.length == 0}
+          onClick={() => {
+            setIsCartOpen(true);
+          }}
         >
           show cart ({selectedGazers.length})
         </Button>
@@ -214,6 +234,13 @@ export const Mint = () => {
             {gazersRemaining}
           </StatNumber>
         </Stat>
+        <Cart
+          isCartOpen={isCartOpen}
+          selectedGazers={selectedGazers}
+          setSelectedGazers={setSelectedGazers}
+          setIsCartOpen={setIsCartOpen}
+          nextPrice={nextPrice}
+        />
       </Flex>
     </Flex>
   );
