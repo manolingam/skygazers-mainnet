@@ -21,18 +21,22 @@ export const Header = () => {
       alignItems='flex-start'
       justifyContent='space-between'
       py='4rem'
-      px='3rem'
+      px='13vw'
     >
       <Flex direction='row' w='80%'>
-        <ChakraImage src='/logo.svg' w='150px' mr='2rem' />
+        <ChakraImage src='/logo.svg' w='275px' h='175px' mr='2rem' />
         <Button
           textTransform='uppercase'
-          fontSize='24px'
           mt='auto'
           bg='transparent'
-          _hover={{ bg: 'transparent', textDecoration: 'underline' }}
-          color='#FF5C00'
-          opacity={pathname === '/' ? '1' : '0.7'}
+          color={pathname === '/' ? '#FF5C00' : '#DDB598'}
+          fontFamily='gatwickBold'
+          fontSize='24px'
+          _hover={{
+            bg: 'transparent',
+            textDecoration: 'underline',
+            color: '#FF5C00'
+          }}
           onClick={() => {
             pathname !== '/' && router.push('/');
           }}
@@ -43,10 +47,14 @@ export const Header = () => {
           textTransform='uppercase'
           fontSize='24px'
           mt='auto'
-          color='#FF5C00'
+          fontFamily='gatwickBold'
+          color={pathname === '/mint' ? '#FF5C00' : '#DDB598'}
           bg='transparent'
-          _hover={{ bg: 'transparent', textDecoration: 'underline' }}
-          opacity={pathname === '/mint' ? '1' : '0.7'}
+          _hover={{
+            bg: 'transparent',
+            textDecoration: 'underline',
+            color: '#FF5C00'
+          }}
           onClick={() => {
             pathname !== '/mint' && router.push('/mint');
           }}
@@ -55,20 +63,30 @@ export const Header = () => {
         </Button>
         <Button
           textTransform='uppercase'
-          fontSize='24px'
           mt='auto'
-          color='#FF5C00'
           bg='transparent'
+          color='#DDB598'
+          fontFamily='gatwickBold'
+          fontSize='24px'
+          _hover={{
+            bg: 'transparent',
+            textDecoration: 'underline'
+          }}
           isDisabled
         >
           Lore
         </Button>
         <Button
           textTransform='uppercase'
-          fontSize='24px'
           mt='auto'
-          color='#FF5C00'
           bg='transparent'
+          color='#DDB598'
+          fontFamily='gatwickBold'
+          fontSize='24px'
+          _hover={{
+            bg: 'transparent',
+            textDecoration: 'underline'
+          }}
           isDisabled
         >
           Proposals
@@ -84,6 +102,7 @@ export const Header = () => {
             color='#59342B'
             fontSize='12px'
             textTransform='uppercase'
+            fontFamily='gatwickBold'
             onClick={() => open()}
           >
             Connect wallet
@@ -98,6 +117,7 @@ export const Header = () => {
             color='#59342B'
             fontSize='12px'
             textTransform='uppercase'
+            fontFamily='gatwickBold'
             onClick={() => disconnect()}
           >
             {`0 SST | ${getAccountString(address)}`}

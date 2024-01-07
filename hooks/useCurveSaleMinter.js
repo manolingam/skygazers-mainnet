@@ -1,6 +1,7 @@
 import { useContractRead, useNetwork } from 'wagmi';
 import { useState } from 'react';
 import { formatEther } from 'viem';
+import { utils, ethers, BigNumber } from 'ethers';
 
 import { CURVE_SALE_MINTER_CONTRACTS } from '@/utils/constants';
 import CURVE_SALE_MINTER_ABI from '../abi/CurveSaleMinter.json';
@@ -12,23 +13,18 @@ export function useCurveSaleMinter() {
   const [gazersRemaining, setGazersRemaining] = useState(0);
   const [nextPrice, setNextPrice] = useState(0);
 
-  const { data: price } = useContractRead({
+  const {} = useContractRead({
     address: CURVE_SALE_MINTER_CONTRACTS[chain?.id],
     abi: CURVE_SALE_MINTER_ABI,
     functionName: 'p',
     cacheOnBlock: true,
-    onSuccess: (data) => {
-      getNextPrice(Number(data));
+    onSuccess: (p) => {
+      const data = p
+        ? parseFloat(utils.formatEther(p))
+        : parseFloat(ethers.BigNumber.from('0').toString());
+      setNextPrice(data);
     }
   });
-
-  const getNextPrice = (_nextPrice) => {
-    let nextPrice = _nextPrice
-      ? parseFloat(formatEther(_nextPrice))
-      : parseFloat(BigInt('0').toString());
-
-    setNextPrice(nextPrice);
-  };
 
   // returns the current index in this curveminter
   const { data: currentIndex } = useContractRead({
@@ -55,5 +51,5 @@ export function useCurveSaleMinter() {
     setGazersRemaining(iterator - index + 1);
   };
 
-  return { gazersRemaining, nextPrice };
+  return { gazersRemaining, nextPrice, currentIndex };
 }

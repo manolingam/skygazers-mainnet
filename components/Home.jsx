@@ -6,7 +6,12 @@ import { Flex, Text, Image as ChakraImage, SimpleGrid } from '@chakra-ui/react';
 export const Home = () => {
   const { address } = useAccount();
   return (
-    <Flex direction='column' justifyContent='space-between'>
+    <Flex
+      fontFamily='gatwick'
+      direction='column'
+      justifyContent='space-between'
+      px='13vw'
+    >
       {!address ? (
         <Flex
           direction='column'
@@ -19,7 +24,7 @@ export const Home = () => {
           <Text textTransform='uppercase' color='white' fontSize='34px'>
             Welcome Traveller
           </Text>
-          <Text fontSize='16px' color='#59342B'>
+          <Text fontSize='16px' color='#59342B' fontFamily='nunitoBold'>
             Please connect you wallet for identification.
           </Text>
         </Flex>

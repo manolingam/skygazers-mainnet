@@ -9,7 +9,7 @@ import { Header } from '@/shared/Header';
 
 export default function MintPage() {
   return (
-    <Flex direction='column' fontFamily='gatwick' maxW='100rem' mx='auto'>
+    <Flex direction='column'>
       <Header />
       <Flex minH='100vh' direction='column' justifyContent='space-between'>
         <Flex direction='row' alignItems='baseline' pb='4rem' px='3rem'>

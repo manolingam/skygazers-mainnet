@@ -27,7 +27,11 @@ const theme = extendTheme({
     }
   },
   fonts: {
-    gatwick: 'gatwick'
+    gatwick: 'gatwick',
+    gatwickLight: 'gatwickLight',
+    gatwickBold: 'gatwickBold',
+    nunito: 'nunito',
+    nunitoBold: 'nunitoBold'
   },
   breakpoints
 });

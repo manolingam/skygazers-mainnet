@@ -19,12 +19,15 @@ import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
 import { SKYGAZERS } from '@/data/traitsMap';
 import { Pagination } from '@/shared/Pagination';
 import { getAccountString } from '@/utils/helpers';
-import { SKYGAZERS_NFT_CONTRACTS } from '@/utils/constants';
+import {
+  BLOCKEXPLORE_BASE_URL,
+  SKYGAZERS_NFT_CONTRACTS
+} from '@/utils/constants';
 import SKYGAZER_ABI from '../abi/SkyGazer.json';
 import Icons from '@/Icons';
 import { Cart } from './Cart';
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 51;
 
 const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
   const { chain } = useNetwork();
@@ -53,6 +56,8 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
             py='6px'
             bg='white'
             fontSize='12px'
+            fontFamily='gatwickBold'
+            color='#59342B'
           >
             SOLD
           </Text>
@@ -85,19 +90,25 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
         justifyContent='space-between'
         my='auto'
       >
-        <Text color='#59342b' fontWeight='bold' fontSize='12px'>
-          #{SKYGAZERS.indexOf(item)}
+        <Text color='#59342b' fontSize='12px' fontFamily='gatwickBold'>
+          # {SKYGAZERS.indexOf(item)}
         </Text>
         {!isError && address ? (
-          <Text fontSize='12px' color='#59342B' opacity='0.6'>
+          <Text fontSize='12px' color='#59342B' fontFamily='gatwick'>
             minted by{' '}
-            <ChakraLink textDecoration='underline' href=''>
+            <ChakraLink
+              textDecoration='underline'
+              href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/address/${owner}`}
+            >
               {getAccountString(owner || '')}
             </ChakraLink>
           </Text>
         ) : (
           <Button
+            w='157px'
+            h='36px'
             borderRadius='18px'
+            fontFamily='gatwickBold'
             bg={
               selectedGazers.includes(SKYGAZERS.indexOf(item))
                 ? 'transparent'
@@ -174,7 +185,7 @@ export const Mint = () => {
   }, []);
 
   return (
-    <Flex direction='row' w='100%'>
+    <Flex direction='row' w='100%' px='13vw'>
       <Flex
         w='100%'
         direction='column'
@@ -197,21 +208,30 @@ export const Mint = () => {
           setCurrentPage={setCurrentPage}
         />
       </Flex>
-      <Flex direction='column' maxH='400px' position='sticky'>
+      <Flex direction='column' maxH='300px' position='sticky'>
         {!address && (
-          <Flex bg='#DDB59866' p='2rem' mb='2rem'>
-            <Text fontSize='14px' textAlign='center'>
+          <Flex w='100%' bg='#DDB59866' p='2rem' mb='2rem'>
+            <Text
+              fontFamily='nunitoBold'
+              fontSize='14px'
+              textAlign='center'
+              mx='auto'
+            >
               Connect wallet to mint
             </Text>
           </Flex>
         )}
         <Button
           border='1px solid'
-          borderRadius='30px'
           color='#FF5C00'
-          fontSize='16px'
-          bg='white'
           py='25px'
+          w='250px'
+          h='60px'
+          borderRadius='30px'
+          fontSize='16px'
+          fontFamily='gatwickBold'
+          _hover={{ opacity: '0.8' }}
+          bg='transparent'
           isDisabled={selectedGazers.length == 0}
           onClick={() => {
             setIsCartOpen(true);
@@ -221,27 +241,27 @@ export const Mint = () => {
         </Button>
         <Divider h='1px' w='100%' bg='#59342b' my='2rem' />
         <Stat>
-          <StatLabel fontSize='14px' color='#59342B'>
+          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
             current price / gazer
           </StatLabel>
-          <StatNumber fontSize='20px' color='#59342B'>
+          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
             {nextPrice} ETH
           </StatNumber>
         </Stat>
         <Stat>
-          <StatLabel fontSize='14px' color='#59342B'>
+          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
             gazers left at current price
           </StatLabel>
-          <StatNumber fontSize='20px' color='#59342B'>
+          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
             {gazersRemaining}
           </StatNumber>
         </Stat>
+        <Divider h='1px' w='100%' bg='#59342b' />
         <Cart
           isCartOpen={isCartOpen}
           selectedGazers={selectedGazers}
           setSelectedGazers={setSelectedGazers}
           setIsCartOpen={setIsCartOpen}
-          nextPrice={nextPrice}
         />
       </Flex>
     </Flex>

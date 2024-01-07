@@ -9,7 +9,7 @@ import { Header } from '@/shared/Header';
 
 export default function Root() {
   return (
-    <Flex direction='column' fontFamily='gatwick' maxW='100rem' mx='auto'>
+    <Flex direction='column'>
       <Header />
 
       <Flex minH='100vh' direction='column' justifyContent='space-between'>
