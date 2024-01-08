@@ -106,7 +106,7 @@ export const AllMintedGazers = () => {
       >
         All Gazers
       </Text>
-      <SimpleGrid columns='4' gap='5' w='100%'>
+      <SimpleGrid columns='4' gap='5' w='80%'>
         {currentItems.length > 0 &&
           currentItems.map((item) => <Gazer item={item} />)}
       </SimpleGrid>
