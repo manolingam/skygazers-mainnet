@@ -185,7 +185,7 @@ export const Mint = () => {
   }, []);
 
   return (
-    <Flex direction='row' w='100%' px='13vw'>
+    <Flex direction='row' w='100%' px='10vw'>
       <Flex
         w='100%'
         direction='column'

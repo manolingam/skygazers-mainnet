@@ -1,11 +1,13 @@
 'use client';
 
 import { Flex } from '@chakra-ui/react';
+import { ApolloProvider } from '@apollo/client';
 
 import { Footer } from '@/shared/Footer';
 import { Home } from '@/components/Home';
-
 import { Header } from '@/shared/Header';
+
+import { GOERLI_SUBGRAPH_CLIENT } from '@/graphql/config';
 
 export default function Root() {
   return (
@@ -14,7 +16,9 @@ export default function Root() {
 
       <Flex minH='100vh' direction='column' justifyContent='space-between'>
         <Flex direction='row' alignItems='baseline' pb='4rem' px='3rem'>
-          <Home />
+          <ApolloProvider client={GOERLI_SUBGRAPH_CLIENT}>
+            <Home />
+          </ApolloProvider>
         </Flex>
       </Flex>
 

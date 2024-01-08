@@ -9,3 +9,6 @@ export const SKYGAZERS_NFT_CONTRACTS = {
 export const BLOCKEXPLORE_BASE_URL = {
   5: 'https://goerli.etherscan.io'
 };
+
+export const GOERLI_SUBGRAPH_URL =
+  'https://api.thegraph.com/subgraphs/name/manolingam/skygazers-goerli';
