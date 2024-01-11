@@ -14,7 +14,7 @@ export default function Root() {
     <Flex direction='column'>
       <Header />
 
-      <Flex minH='100vh' direction='column' justifyContent='space-between'>
+      <Flex minH='100vh' direction='column'>
         <Flex direction='row' alignItems='baseline' pb='4rem' px='3rem'>
           <ApolloProvider client={GOERLI_SUBGRAPH_CLIENT}>
             <Home />

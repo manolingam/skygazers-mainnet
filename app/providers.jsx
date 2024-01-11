@@ -1,8 +1,32 @@
 'use client';
 
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { switchAnatomy } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import Fonts from '@/Fonts';
+
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(switchAnatomy.keys);
+
+const switchStyle = definePartsStyle({
+  // define the part you're going to style
+  container: {
+    // ...
+  },
+  thumb: {
+    bg: '#FF5C00'
+  },
+  track: {
+    bg: 'white',
+    _checked: {
+      bg: 'white'
+    }
+  }
+});
+
+const switchTheme = defineMultiStyleConfig({ switchStyle });
 
 const breakpoints = {
   sm: '320px',
@@ -15,17 +39,7 @@ const breakpoints = {
 };
 
 const theme = extendTheme({
-  colors: {
-    bbb: {
-      pink: '#F9548E',
-      blue: '#8DEEFF',
-      purple: '#392E75',
-      purple2: '#AD98D2',
-      green: '#31EAA0',
-      dark: '#1A4162',
-      yellow: '#F5EA0A'
-    }
-  },
+  colors: {},
   fonts: {
     gatwick: 'gatwick',
     gatwickLight: 'gatwickLight',
@@ -33,14 +47,19 @@ const theme = extendTheme({
     nunito: 'nunito',
     nunitoBold: 'nunitoBold'
   },
-  breakpoints
+  breakpoints,
+  components: { Switch: switchTheme }
 });
+
+const queryClient = new QueryClient();
 
 export function Providers({ children }) {
   return (
     <ChakraProvider theme={theme}>
-      <Fonts />
-      {children}
+      <QueryClientProvider client={queryClient}>
+        <Fonts />
+        {children}
+      </QueryClientProvider>
     </ChakraProvider>
   );
 }

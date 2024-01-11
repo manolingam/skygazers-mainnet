@@ -17,7 +17,7 @@ import { GetMyNFTs } from '@/graphql/queries';
 
 const ITEMS_PER_PAGE = 12;
 
-const Gazer = ({ item }) => {
+const Gazer = ({ item, router }) => {
   return (
     <Flex
       key={item}
@@ -26,6 +26,8 @@ const Gazer = ({ item }) => {
       border='1px solid #DDB598'
       borderBottomWidth='5px'
       p='20px'
+      onClick={() => router.push(`/skygazer/${item.tokenId}`)}
+      cursor='pointer'
     >
       <ChakraImage src='/placeholder.png' w='250px' mr='20px' />
       <Flex direction='column'>
@@ -175,9 +177,9 @@ export const MyGazers = () => {
           </Button>
         </Flex>
       ) : (
-        <SimpleGrid columns='2' w='100%'>
+        <SimpleGrid columns='2' w='100%' gap='5'>
           {currentItems.length > 0 &&
-            currentItems.map((item) => <Gazer item={item} />)}
+            currentItems.map((item) => <Gazer item={item} router={router} />)}
         </SimpleGrid>
       )}
       {totalPages > 1 && (

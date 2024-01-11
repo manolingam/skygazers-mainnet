@@ -8,7 +8,7 @@ export const Footer = () => {
   const router = useRouter();
 
   return (
-    <Flex direction='row' bg='#DDB598' py='4rem' px='10vw'>
+    <Flex direction='row' bg='#DDB598' py='4rem' px='10vw' mt='auto'>
       <ChakraImage src='/logo.svg' w='160px' h='102px' />
       <Flex
         direction='column'
