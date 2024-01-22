@@ -135,7 +135,10 @@ export const CartView = ({
                       fontFamily='gatwick'
                     >
                       <Flex position='relative' mb='10px'>
-                        <ChakraImage src='/placeholder.png' w='100%' />
+                        <ChakraImage
+                          src={`https://skygazersimages.s3.eu-north-1.amazonaws.com/images/${gazerIndex}_660.jpeg`}
+                          w='100%'
+                        />
                         <Button
                           position='absolute'
                           top='-15px'
@@ -235,7 +238,7 @@ export const CartView = ({
                 _hover={{ opacity: '0.8' }}
                 mb='10px'
                 isDisabled={
-                  !termsChecked &&
+                  !termsChecked ||
                   walletBalance < Number(utils.formatEther(cartTotal))
                 }
                 onClick={() => {
@@ -261,7 +264,7 @@ export const CartView = ({
           </ModalContent>
         )}
 
-        {/* {txStateLevel == 2 && (
+        {txStateLevel == 2 && (
           <ModalContent minH='550px' px='4rem' py='4rem'>
             <ModalBody
               display='flex'
@@ -394,7 +397,7 @@ export const CartView = ({
               </Flex>
             </ModalBody>
           </ModalContent>
-        )} */}
+        )}
       </Modal>
     </>
   );
