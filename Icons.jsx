@@ -128,4 +128,4 @@ const Xmark = ({
   </svg>
 );
 
-export default { Copyicon, Arrownext, Arrowprev, Vmark, ArrowLeftNav };
+export default { Copyicon, Arrownext, Arrowprev, Vmark, ArrowLeftNav, Xmark };

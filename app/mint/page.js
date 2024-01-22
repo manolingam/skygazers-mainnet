@@ -2,10 +2,9 @@
 
 import { Flex } from '@chakra-ui/react';
 
-import { Footer } from '@/shared/Footer';
-import { Mint } from '@/components/Mint';
-
 import { Header } from '@/shared/Header';
+import { Footer } from '@/shared/Footer';
+import { Mint } from '@/views/Mint';
 
 export default function MintPage() {
   return (
@@ -16,7 +15,6 @@ export default function MintPage() {
           <Mint />
         </Flex>
       </Flex>
-
       <Footer />
     </Flex>
   );

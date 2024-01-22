@@ -5,10 +5,10 @@ const STORY_STATUS_ENUM = ['draft', 'submitted'];
 const storySchema = new mongoose.Schema(
   {
     gazer_id: Number,
+    owner: String,
     story: {
       title: String,
       intro: String,
-      body: String,
       status: {
         type: String,
         enum: STORY_STATUS_ENUM

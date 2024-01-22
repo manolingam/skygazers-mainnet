@@ -15,17 +15,19 @@ import {
 import { useState, useEffect } from 'react';
 import { useContractRead, useNetwork, useAccount } from 'wagmi';
 
+import { Pagination } from '@/shared/Pagination';
+import { CartView } from './CartView';
+
 import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
 import { SKYGAZERS } from '@/data/traitsMap';
-import { Pagination } from '@/shared/Pagination';
 import { getAccountString } from '@/utils/helpers';
 import {
   BLOCKEXPLORE_BASE_URL,
   SKYGAZERS_NFT_CONTRACTS
 } from '@/utils/constants';
+
 import SKYGAZER_ABI from '../abi/SkyGazer.json';
 import Icons from '@/Icons';
-import { Cart } from './Cart';
 
 const ITEMS_PER_PAGE = 51;
 
@@ -44,7 +46,12 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
   return (
     <Flex key={item} direction='column' mb='2rem'>
       <Flex position='relative' mb='10px'>
-        <ChakraImage src='/placeholder.png' w='100%' />
+        <ChakraImage
+          src={`https://skygazersimages.s3.eu-north-1.amazonaws.com/images/${SKYGAZERS.indexOf(
+            item
+          )}_660.jpeg`}
+          w='100%'
+        />
         {owner ? (
           <Text
             position='absolute'
@@ -257,7 +264,7 @@ export const Mint = () => {
           </StatNumber>
         </Stat>
         <Divider h='1px' w='100%' bg='#59342b' />
-        <Cart
+        <CartView
           isCartOpen={isCartOpen}
           selectedGazers={selectedGazers}
           setSelectedGazers={setSelectedGazers}

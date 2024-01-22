@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
-
 import {
   Flex,
   Text,
@@ -11,9 +10,12 @@ import {
   SimpleGrid,
   Button
 } from '@chakra-ui/react';
+import axios from 'axios';
 
 import { Pagination } from '@/shared/Pagination';
+
 import { GetMyNFTs } from '@/graphql/queries';
+import { formatHoursBefore } from '@/utils/helpers';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -29,38 +31,48 @@ const Gazer = ({ item, router }) => {
       onClick={() => router.push(`/skygazer/${item.tokenId}`)}
       cursor='pointer'
     >
-      <ChakraImage src='/placeholder.png' w='250px' mr='20px' />
+      <ChakraImage
+        src={`https://skygazersimages.s3.eu-north-1.amazonaws.com/images/${item.tokenId}_660.jpeg`}
+        w='250px'
+        mr='20px'
+      />
       <Flex direction='column'>
         <Text fontSize='10px' color='#59342B' mb='10px' opacity='0.7'>
           # {item.tokenId}| Owned by you
         </Text>
         <Text
           fontSize='12px'
-          bg='#D9D9D9'
+          bg={item.status === 'draft' ? 'rgba(255, 171, 123, 0.5)' : '#D9D9D9'}
           color='#59342B'
           mb='10px'
           p='3px 10px 3px 10px'
           mr='auto'
           textAlign='left'
         >
-          no draft yet
+          {item.status}
         </Text>
-        {/* <Text
+        <Text
           fontSize='18px'
+          fontFamily='gatwickBold'
           textTransform='uppercase'
           color='#59342B'
           mb='10px'
         >
-          The day of which they never spoke again
+          {item.title}
         </Text>
         <Text fontSize='12px' color='#59342B'>
-          Not a day goes by without the Skygazers wondering, thinking to
-          themself: what could we have done? What could have prevented this
-          horrible outcome...
+          {item.intro}
         </Text>
-        <Text fontSize='10px' color='#59342B' mt='10px'>
-          Edited 4 hours ago
-        </Text> */}
+        {item.lastEdited && (
+          <Text
+            fontSize='10px'
+            color='#59342B'
+            mt='auto'
+            fontFamily='gatwickBold'
+          >
+            Edited {item.lastEdited} ago
+          </Text>
+        )}
       </Flex>
     </Flex>
   );
@@ -78,9 +90,42 @@ export const MyGazers = () => {
 
   const { refetch, loading } = useQuery(GetMyNFTs, {
     variables: { address },
-    onCompleted: (data) => {
+    onCompleted: async (data) => {
       if (data?.skyGazerOwners && data.skyGazerOwners.length > 0) {
-        setMyGazers(data.skyGazerOwners[0].skygazers);
+        let { data: dbData } = await axios.post('/api/stories/retrieve', {
+          address
+        });
+
+        let subgraphData = data.skyGazerOwners[0].skygazers;
+        dbData = dbData.message;
+
+        let skygazers = [];
+
+        subgraphData.forEach((itemB) => {
+          let matchingElement = dbData.find(
+            (itemA) => Number(itemA.gazer_id) === Number(itemB.tokenId)
+          );
+
+          if (matchingElement) {
+            skygazers.push({
+              tokenId: itemB.tokenId,
+              status: 'draft',
+              title: matchingElement.story.title,
+              intro: matchingElement.story.intro,
+              lastEdited: formatHoursBefore(matchingElement.updatedAt)
+            });
+          } else {
+            skygazers.push({
+              tokenId: itemB.tokenId,
+              status: 'no draft yet',
+              title: '',
+              intro: '',
+              lastEdited: ''
+            });
+          }
+        });
+
+        setMyGazers(skygazers);
       } else {
         setMyGazers([]);
         setCurrentItems([]);

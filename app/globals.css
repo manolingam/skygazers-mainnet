@@ -124,3 +124,12 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #59342b;
 }
+
+:focus-visible {
+  outline: none;
+  border: none;
+}
+
+/* .tiptap {
+  padding-left: 2rem;
+} */
