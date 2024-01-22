@@ -107,7 +107,7 @@ export const StoryEditor = ({ setBody, body, editMode, ipfsHash }) => {
           )}
           <EditorContent editor={editor} />
         </Flex>
-      ) : (
+      ) : ipfsHash ? (
         <Button
           border='1px solid'
           color='#FF5C00'
@@ -125,6 +125,66 @@ export const StoryEditor = ({ setBody, body, editMode, ipfsHash }) => {
         >
           Fetch Story
         </Button>
+      ) : (
+        <Flex
+          direction='column'
+          border={editMode ? '2px solid #59342B' : '2px solid transparent'}
+          bg='transparent'
+          borderRadius='2px'
+          resize='none'
+          w='70%'
+          h='700px'
+          mt='1rem'
+          p='1rem'
+          fontSize='18px'
+          fontFamily='nunito'
+          color='#59342B'
+        >
+          {editMode && (
+            <Flex direction='row' mb='2rem' fontFamily='gatwick'>
+              <Button
+                bg={
+                  editor?.isActive('bold')
+                    ? 'rgba(221, 181, 152, 0.4)'
+                    : 'transparent'
+                }
+                _hover={{ opacity: '0.8' }}
+                onClick={() => {
+                  editor.chain().focus().toggleBold().run();
+                }}
+              >
+                B
+              </Button>
+              <Button
+                bg={
+                  editor?.isActive('italic')
+                    ? 'rgba(221, 181, 152, 0.4)'
+                    : 'transparent'
+                }
+                _hover={{ opacity: '0.8' }}
+                onClick={() => {
+                  editor.chain().focus().toggleItalic().run();
+                }}
+              >
+                I
+              </Button>
+              <Button
+                bg={
+                  editor?.isActive('underline')
+                    ? 'rgba(221, 181, 152, 0.4)'
+                    : 'transparent'
+                }
+                _hover={{ opacity: '0.8' }}
+                onClick={() => {
+                  editor.chain().focus().toggleUnderline().run();
+                }}
+              >
+                U
+              </Button>
+            </Flex>
+          )}
+          <EditorContent editor={editor} />
+        </Flex>
       )}
     </>
   );
