@@ -41,11 +41,9 @@ const Gazer = ({ item, router }) => {
           # {item.tokenId} | Owned by{' '}
           <ChakraLink
             textDecoration='underline'
-            href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/address/${
-              item.owner.address
-            }`}
+            href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/address/${item.owner}`}
           >
-            {getAccountString(item.owner.address || '')}
+            {getAccountString(item.owner || '')}
           </ChakraLink>
         </Text>
         <Text

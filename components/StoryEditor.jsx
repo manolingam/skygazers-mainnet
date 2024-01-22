@@ -1,7 +1,7 @@
 'use client';
 
 import { Flex, Button } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { useEditor, EditorContent } from '@tiptap/react';
@@ -11,6 +11,8 @@ import Text from '@tiptap/extension-text';
 import Underline from '@tiptap/extension-underline';
 
 export const StoryEditor = ({ setBody, body, editMode, ipfsHash }) => {
+  const [loading, setLoading] = useState(false);
+
   const editor = useEditor({
     extensions: [Document, StarterKit, Text, Underline],
     onUpdate: ({ editor }) => {
@@ -20,11 +22,13 @@ export const StoryEditor = ({ setBody, body, editMode, ipfsHash }) => {
   });
 
   const fetchStory = async () => {
+    setLoading(true);
     let ipfsData = await axios.get(
       `${process.env.NEXT_PUBLIC_PINATA_GATEWAY}/${ipfsHash}`
     );
     setBody(ipfsData.data.body);
     editor?.commands?.setContent(ipfsData.data.body);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -117,6 +121,7 @@ export const StoryEditor = ({ setBody, body, editMode, ipfsHash }) => {
           _hover={{ opacity: '0.8' }}
           bg='transparent'
           onClick={() => fetchStory()}
+          isLoading={loading}
         >
           Fetch Story
         </Button>
