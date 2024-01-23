@@ -1,8 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useAccount, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { useQuery } from '@apollo/client';
-import { useQuery as useQueryTanstack } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import {
   Flex,
@@ -14,6 +13,7 @@ import {
 import axios from 'axios';
 
 import { Pagination } from '@/shared/Pagination';
+import { SkyLoader } from './Skyloader';
 
 import { BLOCKEXPLORE_BASE_URL } from '@/utils/constants';
 import { getAccountString, formatHoursBefore } from '@/utils/helpers';
@@ -27,13 +27,13 @@ const Gazer = ({ item, router }) => {
   return (
     <Flex
       key={item}
-      direction='column'
+      direction={{ lg: 'column', sm: 'row' }}
       onClick={() => router.push(`/skygazer/${item.tokenId}`)}
       cursor='pointer'
     >
       <ChakraImage
-        src={`https://skygazersimages.s3.eu-north-1.amazonaws.com/images/${item.tokenId}_660.jpeg`}
-        w='250px'
+        src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${item.tokenId}_660.jpeg`}
+        w={{ lg: '250px', sm: '120px' }}
         mr='20px'
       />
       <Flex direction='column'>
@@ -48,7 +48,11 @@ const Gazer = ({ item, router }) => {
         </Text>
         <Text
           fontSize='12px'
-          bg={item.status === 'draft' ? 'rgba(255, 171, 123, 0.5)' : '#D9D9D9'}
+          bg={
+            item.status === 'draft'
+              ? 'rgba(255, 171, 123, 0.5)'
+              : 'rgb(217, 217, 217, 0.3)'
+          }
           color='#59342B'
           mb='10px'
           p='3px 10px 3px 10px'
@@ -58,11 +62,12 @@ const Gazer = ({ item, router }) => {
           {item.status}
         </Text>
         <Text
-          fontSize='18px'
+          fontSize={{ lg: '18px', sm: '14px' }}
           textTransform='uppercase'
           color='#59342B'
           mb='10px'
           fontFamily='gatwickBold'
+          noOfLines={[1, 2, 3]}
         >
           {item.title}
         </Text>
@@ -80,25 +85,7 @@ export const MintedGazers = () => {
 
   const router = useRouter();
 
-  // const {
-  //   isLoading: storiesLoading,
-  //   isError: storiesError,
-  //   data: stories,
-  //   refetch: storiesRefetch,
-  //   isFetching
-  // } = useQueryTanstack({
-  //   queryKey: ['stories'],
-  //   queryFn: async () => {
-  //     let { data } = await axios.post('/api/stories/retrieve');
-  //     let { message } = data;
-
-  //     return message;
-  //   },
-
-  //   enabled: true
-  // });
-
-  const {} = useQuery(GetMintedNFTs, {
+  const { loading } = useQuery(GetMintedNFTs, {
     onCompleted: async (data) => {
       if (data.skyGazers) {
         let { data: dbData } = await axios.post('/api/stories/retrieve', {
@@ -168,23 +155,33 @@ export const MintedGazers = () => {
       <Text
         fontFamily='gatwickLight'
         fontSize='8px'
-        color='#DDB598'
+        color='rgb(89, 52, 43, 0.5) '
         mb='1rem'
         textTransform='uppercase'
         letterSpacing='8px'
       >
         All Gazers
       </Text>
-      <SimpleGrid columns='4' gap='5' w='80%'>
-        {currentItems.length > 0 &&
-          currentItems.map((item) => <Gazer item={item} router={router} />)}
-      </SimpleGrid>
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
-        />
+
+      {loading && <SkyLoader />}
+      {!loading && (
+        <>
+          <SimpleGrid
+            columns={{ lg: '4', sm: '1' }}
+            gap='5'
+            w={{ lg: '80%', sm: '100%' }}
+          >
+            {currentItems.length > 0 &&
+              currentItems.map((item) => <Gazer item={item} router={router} />)}
+          </SimpleGrid>
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
+        </>
       )}
     </>
   );

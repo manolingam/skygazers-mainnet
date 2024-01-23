@@ -4,8 +4,8 @@ import priceCurveDroids from '../data/priceCurveDroids.json';
 
 export const getAccountString = (account) => {
   const len = account.length;
-  return `0x${account.substr(2, 3).toUpperCase()}...${account
-    .substr(len - 3, len - 1)
+  return `0x${account.substr(2, 2).toUpperCase()}...${account
+    .substr(len - 2, len - 1)
     .toUpperCase()}`;
 };
 

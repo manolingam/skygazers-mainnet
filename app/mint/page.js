@@ -10,11 +10,7 @@ export default function MintPage() {
   return (
     <Flex direction='column'>
       <Header />
-      <Flex minH='100vh' direction='column'>
-        <Flex direction='row' alignItems='baseline' pb='4rem' px='3rem'>
-          <Mint />
-        </Flex>
-      </Flex>
+      <Mint />
       <Footer />
     </Flex>
   );

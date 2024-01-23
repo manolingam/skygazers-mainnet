@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 import { useContractRead, useNetwork, useAccount } from 'wagmi';
 
 import { Pagination } from '@/shared/Pagination';
-import { CartView } from './CartView';
+import { Cart } from '../components/Cart';
 
 import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
 import { SKYGAZERS } from '@/data/traitsMap';
@@ -47,10 +47,23 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
     <Flex key={item} direction='column' mb='2rem'>
       <Flex position='relative' mb='10px'>
         <ChakraImage
-          src={`https://skygazersimages.s3.eu-north-1.amazonaws.com/images/${SKYGAZERS.indexOf(
-            item
-          )}_660.jpeg`}
+          src={`${
+            process.env.NEXT_PUBLIC_AWS_BASE_URL
+          }/images/${SKYGAZERS.indexOf(item)}_660.jpeg`}
+          fallbackSrc='/placeholder.png'
           w='100%'
+          cursor='pointer'
+          onClick={() => {
+            if (selectedGazers.includes(SKYGAZERS.indexOf(item))) {
+              setSelectedGazers(
+                selectedGazers.filter(
+                  (_gazer) => _gazer !== SKYGAZERS.indexOf(item)
+                )
+              );
+            } else {
+              setSelectedGazers((prev) => [...prev, SKYGAZERS.indexOf(item)]);
+            }
+          }}
         />
         {owner ? (
           <Text
@@ -192,84 +205,101 @@ export const Mint = () => {
   }, []);
 
   return (
-    <Flex direction='row' w='100%' px='10vw'>
+    <Flex minH='100vh' direction='column'>
       <Flex
-        w='100%'
-        direction='column'
-        justifyContent='space-between'
-        mr='3rem'
+        direction='row'
+        alignItems='baseline'
+        pb='4rem'
+        px={{ lg: '3rem', sm: '1rem' }}
       >
-        <SimpleGrid columns='3' gap='4'>
-          {currentItems.length > 0 &&
-            currentItems.map((item) => (
-              <Gazer
-                item={item}
-                selectedGazers={selectedGazers}
-                setSelectedGazers={setSelectedGazers}
-              />
-            ))}
-        </SimpleGrid>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
-        />
-      </Flex>
-      <Flex direction='column' maxH='300px' position='sticky'>
-        {!address && (
-          <Flex w='100%' bg='#DDB59866' p='2rem' mb='2rem'>
-            <Text
-              fontFamily='nunitoBold'
-              fontSize='14px'
-              textAlign='center'
-              mx='auto'
-            >
-              Connect wallet to mint
-            </Text>
+        <Flex direction='row' w='100%' px='10vw'>
+          <Flex
+            w='100%'
+            direction='column'
+            justifyContent='space-between'
+            mr='3rem'
+          >
+            <SimpleGrid columns={{ lg: '3', sm: '1' }} gap='4'>
+              {currentItems.length > 0 &&
+                currentItems.map((item) => (
+                  <Gazer
+                    item={item}
+                    selectedGazers={selectedGazers}
+                    setSelectedGazers={setSelectedGazers}
+                  />
+                ))}
+            </SimpleGrid>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+            />
           </Flex>
-        )}
-        <Button
-          border='1px solid'
-          color='#FF5C00'
-          py='25px'
-          w='250px'
-          h='60px'
-          borderRadius='30px'
-          fontSize='16px'
-          fontFamily='gatwickBold'
-          _hover={{ opacity: '0.8' }}
-          bg='transparent'
-          isDisabled={selectedGazers.length == 0}
-          onClick={() => {
-            setIsCartOpen(true);
-          }}
-        >
-          show cart ({selectedGazers.length})
-        </Button>
-        <Divider h='1px' w='100%' bg='#59342b' my='2rem' />
-        <Stat>
-          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
-            current price / gazer
-          </StatLabel>
-          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
-            {nextPrice} ETH
-          </StatNumber>
-        </Stat>
-        <Stat>
-          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
-            gazers left at current price
-          </StatLabel>
-          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
-            {gazersRemaining}
-          </StatNumber>
-        </Stat>
-        <Divider h='1px' w='100%' bg='#59342b' />
-        <CartView
-          isCartOpen={isCartOpen}
-          selectedGazers={selectedGazers}
-          setSelectedGazers={setSelectedGazers}
-          setIsCartOpen={setIsCartOpen}
-        />
+          <Flex direction='column' maxH='300px' position='sticky'>
+            {!address && (
+              <Flex w='100%' bg='#DDB59866' p='2rem' mb='2rem'>
+                <Text
+                  fontFamily='nunitoBold'
+                  fontSize='14px'
+                  textAlign='center'
+                  mx='auto'
+                >
+                  Connect wallet to mint
+                </Text>
+              </Flex>
+            )}
+            <Button
+              border='1px solid'
+              color='#FF5C00'
+              py='25px'
+              w='250px'
+              h='60px'
+              borderRadius='30px'
+              fontSize='16px'
+              fontFamily='gatwickBold'
+              _hover={{ opacity: '0.8' }}
+              bg='transparent'
+              isDisabled={selectedGazers.length == 0}
+              onClick={() => {
+                setIsCartOpen(true);
+              }}
+            >
+              show cart ({selectedGazers.length})
+            </Button>
+            <Divider h='1px' w='100%' bg='#59342b' my='2rem' />
+            <Stat>
+              <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
+                current price / gazer
+              </StatLabel>
+              <StatNumber
+                fontSize='20px'
+                color='#59342B'
+                fontFamily='gatwickBold'
+              >
+                {nextPrice} ETH
+              </StatNumber>
+            </Stat>
+            <Stat>
+              <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
+                gazers left at current price
+              </StatLabel>
+              <StatNumber
+                fontSize='20px'
+                color='#59342B'
+                fontFamily='gatwickBold'
+              >
+                {gazersRemaining}
+              </StatNumber>
+            </Stat>
+            <Divider h='1px' w='100%' bg='#59342b' />
+            <Cart
+              isCartOpen={isCartOpen}
+              selectedGazers={selectedGazers}
+              setSelectedGazers={setSelectedGazers}
+              setIsCartOpen={setIsCartOpen}
+            />
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );

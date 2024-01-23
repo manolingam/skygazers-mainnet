@@ -8,11 +8,23 @@ export const Footer = () => {
   const router = useRouter();
 
   return (
-    <Flex direction='row' bg='#DDB598' py='4rem' px='10vw' mt='auto'>
-      <ChakraImage src='/logo.svg' w='160px' h='102px' />
+    <Flex
+      direction={{ lg: 'row', sm: 'column' }}
+      bg='#DDB598'
+      py='4rem'
+      px='10vw'
+      mt='auto'
+    >
+      <ChakraImage
+        src='/logo.svg'
+        w='160px'
+        h='102px'
+        mb={{ lg: '0', sm: '2rem' }}
+      />
       <Flex
         direction='column'
-        ml='4rem'
+        ml={{ lg: '4rem', sm: '0' }}
+        my={{ lg: '0', sm: '1rem' }}
         fontWeight='bold'
         textTransform='uppercase'
         color='#59342b'
@@ -76,7 +88,7 @@ export const Footer = () => {
       </Flex>
       <Flex
         direction='column'
-        ml='2rem'
+        ml={{ lg: '2rem', sm: '0' }}
         textTransform='uppercase'
         color='#59342b'
       >

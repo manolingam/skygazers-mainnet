@@ -16,6 +16,7 @@ import { Pagination } from '@/shared/Pagination';
 
 import { GetMyNFTs } from '@/graphql/queries';
 import { formatHoursBefore } from '@/utils/helpers';
+import { SkyLoader } from './Skyloader';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -23,7 +24,7 @@ const Gazer = ({ item, router }) => {
   return (
     <Flex
       key={item}
-      direction='row'
+      direction={{ lg: 'row', sm: 'column' }}
       alignItems='stretch'
       border='1px solid #DDB598'
       borderBottomWidth='5px'
@@ -32,17 +33,27 @@ const Gazer = ({ item, router }) => {
       cursor='pointer'
     >
       <ChakraImage
-        src={`https://skygazersimages.s3.eu-north-1.amazonaws.com/images/${item.tokenId}_660.jpeg`}
+        src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${item.tokenId}_660.jpeg`}
         w='250px'
         mr='20px'
       />
       <Flex direction='column'>
-        <Text fontSize='10px' color='#59342B' mb='10px' opacity='0.7'>
+        <Text
+          fontSize='10px'
+          color='#59342B'
+          mb='10px'
+          mt={{ lg: '0', sm: '10px' }}
+          opacity='0.7'
+        >
           # {item.tokenId}| Owned by you
         </Text>
         <Text
           fontSize='12px'
-          bg={item.status === 'draft' ? 'rgba(255, 171, 123, 0.5)' : '#D9D9D9'}
+          bg={
+            item.status === 'draft'
+              ? 'rgba(255, 171, 123, 0.5)'
+              : 'rgb(217, 217, 217, 0.3)'
+          }
           color='#59342B'
           mb='10px'
           p='3px 10px 3px 10px'
@@ -60,7 +71,7 @@ const Gazer = ({ item, router }) => {
         >
           {item.title}
         </Text>
-        <Text fontSize='12px' color='#59342B'>
+        <Text fontSize='12px' color='#59342B' mb='10px'>
           {item.intro}
         </Text>
         {item.lastEdited && (
@@ -189,50 +200,65 @@ export const MyGazers = () => {
       >
         Your Gazers
       </Text>
-      {!loading && myGazers.length == 0 ? (
-        <Flex
-          direction='column'
-          alignItems='center'
-          justifyContent='center'
-          h='200px'
-          bg='#white'
-          borderTop='1px solid #DDB59866'
-          borderLeft='1px solid #DDB59866'
-          borderRight='1px solid #DDB59866'
-          borderBottom='5px solid #DDB59866'
-          mb='4rem'
-        >
-          <Text color='#59342B' fontFamily='nunito' fontSize='18px' mb='1rem'>
-            You don't own any gazers..yet
-          </Text>
-          <Button
-            color='#FF5C00'
-            fontFamily='gatwickBold'
-            border='1px solid #FF5C00'
-            borderRadius='18px'
-            px='25px'
-            py='10px'
-            bg='white'
-            _hover={{
-              bg: 'transparent'
-            }}
-            onClick={() => router.push('/mint')}
-          >
-            Mint gazers
-          </Button>
-        </Flex>
-      ) : (
-        <SimpleGrid columns='2' w='100%' gap='5'>
-          {currentItems.length > 0 &&
-            currentItems.map((item) => <Gazer item={item} router={router} />)}
-        </SimpleGrid>
+
+      {myGazers.length > 0 && (
+        <>
+          <SimpleGrid columns={{ lg: '2', sm: '1' }} w='100%' gap='5'>
+            {currentItems.length > 0 &&
+              currentItems.map((item) => <Gazer item={item} router={router} />)}
+          </SimpleGrid>
+          {totalPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
+        </>
       )}
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
-        />
+
+      {myGazers.length == 0 && (
+        <>
+          {!loading && (
+            <Flex
+              direction='column'
+              alignItems='center'
+              justifyContent='center'
+              h='200px'
+              bg='#white'
+              borderTop='1px solid #DDB59866'
+              borderLeft='1px solid #DDB59866'
+              borderRight='1px solid #DDB59866'
+              borderBottom='5px solid #DDB59866'
+              mb='4rem'
+            >
+              <Text
+                color='#59342B'
+                fontFamily='nunito'
+                fontSize='18px'
+                mb='1rem'
+              >
+                You don't own any gazers..yet
+              </Text>
+              <Button
+                color='#FF5C00'
+                fontFamily='gatwickBold'
+                border='1px solid #FF5C00'
+                borderRadius='18px'
+                px='25px'
+                py='10px'
+                bg='white'
+                _hover={{
+                  bg: 'transparent'
+                }}
+                onClick={() => router.push('/mint')}
+              >
+                Mint gazers
+              </Button>
+            </Flex>
+          )}
+          {loading && <SkyLoader />}
+        </>
       )}
     </Flex>
   );

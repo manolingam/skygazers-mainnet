@@ -35,9 +35,9 @@ import {
 } from '@/utils/constants';
 import { getAccountString, getPrices } from '@/utils/helpers';
 import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
-import { SkyLoader } from '@/shared/Skyloader';
+import { SkyLoader } from '@/components/Skyloader';
 
-export const CartView = ({
+export const Cart = ({
   isCartOpen,
   setIsCartOpen,
   selectedGazers,
@@ -80,6 +80,7 @@ export const CartView = ({
     onSuccess() {
       setTxReceipt('');
       setTxStateLevel(4);
+      setSelectedGazers([]);
     }
   });
 
@@ -136,7 +137,7 @@ export const CartView = ({
                     >
                       <Flex position='relative' mb='10px'>
                         <ChakraImage
-                          src={`https://skygazersimages.s3.eu-north-1.amazonaws.com/images/${gazerIndex}_660.jpeg`}
+                          src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${gazerIndex}_660.jpeg`}
                           w='100%'
                         />
                         <Button
