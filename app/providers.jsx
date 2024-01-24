@@ -1,32 +1,31 @@
 'use client';
 
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
-import { switchAnatomy } from '@chakra-ui/anatomy';
-import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import Fonts from '@/Fonts';
 
+import { switchAnatomy } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
+
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(switchAnatomy.keys);
 
-const switchStyle = definePartsStyle({
-  // define the part you're going to style
-  container: {
-    // ...
-  },
-  thumb: {
-    bg: '#FF5C00'
-  },
+const baseStyle = definePartsStyle((props) => ({
   track: {
-    bg: 'white',
+    p: 1,
+    backgroundColor: 'white',
+    border: '1px solid rgba(255, 92, 0, 1)',
     _checked: {
       bg: 'white'
     }
+  },
+  thumb: {
+    backgroundColor: 'rgba(255, 92, 0, 1)'
   }
-});
+}));
 
-const switchTheme = defineMultiStyleConfig({ switchStyle });
+const switchTheme = defineMultiStyleConfig({ baseStyle });
 
 const breakpoints = {
   sm: '320px',

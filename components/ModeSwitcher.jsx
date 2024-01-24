@@ -25,6 +25,7 @@ export const ModeSwitcher = ({
           <Switch
             mx='10px'
             isChecked={editMode}
+            // variant='boxy'
             isDisabled={
               storyLoading ||
               storyError ||
