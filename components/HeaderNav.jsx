@@ -11,12 +11,18 @@ export const HeaderNav = () => {
       direction='row'
       alignItems='flex-start'
       justifyContent='space-between'
-      py='4rem'
+      py='3rem'
       px='10vw'
     >
       {!params?.id && (
         <Flex direction='row' w='80%'>
-          <ChakraImage src='/logo.svg' w='275px' h='175px' mr='2rem' />
+          <ChakraImage
+            src='/logo.svg'
+            w='275px'
+            h='175px'
+            mr='2rem'
+            mb='10px'
+          />
           <Flex direction='column' alignItems='flex-start'>
             <Button
               textTransform='uppercase'

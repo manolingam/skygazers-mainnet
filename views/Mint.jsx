@@ -54,14 +54,16 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
           w='100%'
           cursor='pointer'
           onClick={() => {
-            if (selectedGazers.includes(SKYGAZERS.indexOf(item))) {
-              setSelectedGazers(
-                selectedGazers.filter(
-                  (_gazer) => _gazer !== SKYGAZERS.indexOf(item)
-                )
-              );
-            } else {
-              setSelectedGazers((prev) => [...prev, SKYGAZERS.indexOf(item)]);
+            if (address) {
+              if (selectedGazers.includes(SKYGAZERS.indexOf(item))) {
+                setSelectedGazers(
+                  selectedGazers.filter(
+                    (_gazer) => _gazer !== SKYGAZERS.indexOf(item)
+                  )
+                );
+              } else {
+                setSelectedGazers((prev) => [...prev, SKYGAZERS.indexOf(item)]);
+              }
             }
           }}
         />
