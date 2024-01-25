@@ -7,14 +7,14 @@ export const HeaderNav = () => {
   const params = useParams();
 
   return (
-    <Flex
-      direction='row'
-      alignItems='flex-start'
-      justifyContent='space-between'
-      py='3rem'
-      px='10vw'
-    >
-      {!params?.id && (
+    !params?.id && (
+      <Flex
+        direction='row'
+        alignItems='flex-start'
+        justifyContent='space-between'
+        pb='3rem'
+        px={{ lg: '7.5vw', sm: '1rem' }}
+      >
         <Flex direction='row' w='80%'>
           <ChakraImage
             src='/logo.svg'
@@ -90,7 +90,7 @@ export const HeaderNav = () => {
             </Flex>
           </Flex>
         </Flex>
-      )}
-    </Flex>
+      </Flex>
+    )
   );
 };

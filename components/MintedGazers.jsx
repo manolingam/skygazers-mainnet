@@ -167,7 +167,7 @@ export const MintedGazers = () => {
       {!loading && (
         <>
           <SimpleGrid
-            columns={{ lg: '4', sm: '1' }}
+            columns={{ xl: '6', lg: '5', md: '3', sm: '1' }}
             gap='5'
             w={{ lg: '80%', sm: '100%' }}
           >

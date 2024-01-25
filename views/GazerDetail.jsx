@@ -3,6 +3,7 @@ import {
   Text,
   Divider,
   Image as ChakraImage,
+  Link as ChakraLink,
   SimpleGrid,
   Button,
   Box,
@@ -19,7 +20,10 @@ import { ModeSwitcher } from '@/components/ModeSwitcher';
 import { MessageNote } from '@/components/MessageNote';
 import { StoryEditor } from '@/components/StoryEditor';
 
-import { SKYGAZERS_NFT_CONTRACTS } from '@/utils/constants';
+import {
+  SKYGAZERS_NFT_CONTRACTS,
+  BLOCKEXPLORE_BASE_URL
+} from '@/utils/constants';
 import { getAccountString } from '@/utils/helpers';
 
 import SKYGAZER_ABI from '../abi/SkyGazer.json';
@@ -106,12 +110,12 @@ export const GazerDetail = ({ params }) => {
   };
 
   return (
-    <Flex direction='column' px='10vw' pb='4rem'>
+    <Flex direction='column' px={{ lg: '7.5vw', sm: '1rem' }} pb='4rem'>
       <Box cursor='pointer' onClick={() => router.back()}>
         <Icons.ArrowLeftNav />
       </Box>
 
-      <SimpleGrid columns='2' gap='10' mt='2rem'>
+      <SimpleGrid columns='2' mt='2rem'>
         {!address && (
           <MessageNote
             message={
@@ -122,14 +126,23 @@ export const GazerDetail = ({ params }) => {
 
         {address && (
           <Flex direction='column'>
-            <ModeSwitcher
-              owner={owner}
-              editMode={editMode}
-              setEditMode={setEditMode}
-              storyLoading={storyLoading}
-              storyError={storyError}
-            />
-            <Divider h='3px' w='100%' bg='#DDB598' mb='2rem' mt='10px' />
+            {owner?.toLowerCase() === address.toLowerCase() && (
+              <>
+                <ModeSwitcher
+                  editMode={editMode}
+                  setEditMode={setEditMode}
+                  storyLoading={storyLoading}
+                  storyError={storyError}
+                />
+                <Divider
+                  h='3px'
+                  w='100%'
+                  bg='rgba(221, 181, 152, 0.5)'
+                  mb='2rem'
+                  mt='10px'
+                />
+              </>
+            )}
             <Text
               fontSize='14px'
               fontFamily='gatwickBold'
@@ -137,9 +150,15 @@ export const GazerDetail = ({ params }) => {
               mb='10px'
             >
               # {params.id} | Owned by{' '}
-              {owner?.toLowerCase() === address.toLowerCase()
-                ? 'you'
-                : getAccountString(owner || '')}
+              <ChakraLink
+                href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/address/${owner}`}
+                isExternal
+                textDecoration='underline'
+              >
+                {owner?.toLowerCase() === address.toLowerCase()
+                  ? 'you'
+                  : getAccountString(owner || '')}
+              </ChakraLink>
             </Text>
             {!storyLoading && (intro || editMode) ? (
               <StoryEditor
@@ -163,8 +182,8 @@ export const GazerDetail = ({ params }) => {
 
         <ChakraImage
           src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${params.id}_660.jpeg`}
-          w='500px'
-          float='right'
+          w='600px'
+          ml='80px'
         />
       </SimpleGrid>
 

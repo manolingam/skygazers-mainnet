@@ -207,101 +207,90 @@ export const Mint = () => {
   }, []);
 
   return (
-    <Flex minH='100vh' direction='column'>
+    <Flex
+      minH='100vh'
+      direction='row'
+      alignItems='flex-start'
+      pb='4rem'
+      px={{ lg: '7.5vw', sm: '1rem' }}
+    >
       <Flex
-        direction='row'
-        alignItems='baseline'
-        pb='4rem'
-        px={{ lg: '3rem', sm: '1rem' }}
+        w='100%'
+        direction='column'
+        justifyContent='space-between'
+        mr='3rem'
       >
-        <Flex direction='row' w='100%' px='10vw'>
-          <Flex
-            w='100%'
-            direction='column'
-            justifyContent='space-between'
-            mr='3rem'
-          >
-            <SimpleGrid columns={{ lg: '3', sm: '1' }} gap='4'>
-              {currentItems.length > 0 &&
-                currentItems.map((item) => (
-                  <Gazer
-                    item={item}
-                    selectedGazers={selectedGazers}
-                    setSelectedGazers={setSelectedGazers}
-                  />
-                ))}
-            </SimpleGrid>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              setCurrentPage={setCurrentPage}
-            />
-          </Flex>
-          <Flex direction='column' maxH='300px' position='sticky'>
-            {!address && (
-              <Flex w='100%' bg='#DDB59866' p='2rem' mb='2rem'>
-                <Text
-                  fontFamily='nunitoBold'
-                  fontSize='14px'
-                  textAlign='center'
-                  mx='auto'
-                >
-                  Connect wallet to mint
-                </Text>
-              </Flex>
-            )}
-            <Button
-              border='1px solid'
-              color='#FF5C00'
-              py='25px'
-              w='250px'
-              h='60px'
-              borderRadius='30px'
-              fontSize='16px'
-              fontFamily='gatwickBold'
-              _hover={{ opacity: '0.8' }}
-              bg='transparent'
-              isDisabled={selectedGazers.length == 0}
-              onClick={() => {
-                setIsCartOpen(true);
-              }}
+        <SimpleGrid columns={{ lg: '3', sm: '1' }} gap='4'>
+          {currentItems.length > 0 &&
+            currentItems.map((item) => (
+              <Gazer
+                item={item}
+                selectedGazers={selectedGazers}
+                setSelectedGazers={setSelectedGazers}
+              />
+            ))}
+        </SimpleGrid>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
+      </Flex>
+      <Flex direction='column'>
+        {!address && (
+          <Flex w='100%' bg='#DDB59866' p='2rem' mb='2rem'>
+            <Text
+              fontFamily='nunitoBold'
+              fontSize='14px'
+              textAlign='center'
+              mx='auto'
             >
-              show cart ({selectedGazers.length})
-            </Button>
-            <Divider h='1px' w='100%' bg='#59342b' my='2rem' />
-            <Stat>
-              <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
-                current price / gazer
-              </StatLabel>
-              <StatNumber
-                fontSize='20px'
-                color='#59342B'
-                fontFamily='gatwickBold'
-              >
-                {nextPrice} ETH
-              </StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
-                gazers left at current price
-              </StatLabel>
-              <StatNumber
-                fontSize='20px'
-                color='#59342B'
-                fontFamily='gatwickBold'
-              >
-                {gazersRemaining}
-              </StatNumber>
-            </Stat>
-            <Divider h='1px' w='100%' bg='#59342b' />
-            <Cart
-              isCartOpen={isCartOpen}
-              selectedGazers={selectedGazers}
-              setSelectedGazers={setSelectedGazers}
-              setIsCartOpen={setIsCartOpen}
-            />
+              Connect wallet to mint
+            </Text>
           </Flex>
-        </Flex>
+        )}
+        <Button
+          border='1px solid'
+          color='#FF5C00'
+          py='25px'
+          w='250px'
+          h='60px'
+          borderRadius='30px'
+          fontSize='16px'
+          fontFamily='gatwickBold'
+          _hover={{ opacity: '0.8' }}
+          bg='transparent'
+          isDisabled={selectedGazers.length == 0}
+          onClick={() => {
+            setIsCartOpen(true);
+          }}
+        >
+          show cart ({selectedGazers.length})
+        </Button>
+        <Divider h='1px' w='100%' bg='#59342b' my='2rem' />
+        <Stat>
+          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
+            current price / gazer
+          </StatLabel>
+          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
+            {nextPrice} ETH
+          </StatNumber>
+        </Stat>
+        <Stat mt='1rem'>
+          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
+            gazers left at current price
+          </StatLabel>
+          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
+            {gazersRemaining}
+          </StatNumber>
+        </Stat>
+        <Divider h='1px' w='100%' bg='#59342b' />
+        <Cart
+          isCartOpen={isCartOpen}
+          selectedGazers={selectedGazers}
+          setSelectedGazers={setSelectedGazers}
+          setIsCartOpen={setIsCartOpen}
+        />
       </Flex>
     </Flex>
   );

@@ -8,26 +8,19 @@ import { GOERLI_SUBGRAPH_CLIENT } from '@/graphql/config';
 
 export const Home = () => {
   return (
-    <Flex minH='100vh' direction='column'>
+    <ApolloProvider client={GOERLI_SUBGRAPH_CLIENT}>
       <Flex
-        direction='row'
-        alignItems='baseline'
+        minH='100vh'
+        direction='column'
+        w='100%'
+        fontFamily='gatwick'
+        justifyContent='space-between'
         pb='4rem'
-        px={{ lg: '3rem', sm: '1rem' }}
+        px={{ lg: '7.5vw', sm: '1rem' }}
       >
-        <ApolloProvider client={GOERLI_SUBGRAPH_CLIENT}>
-          <Flex
-            w='100%'
-            fontFamily='gatwick'
-            direction='column'
-            justifyContent='space-between'
-            px='10vw'
-          >
-            <MyGazers />
-            <MintedGazers />
-          </Flex>
-        </ApolloProvider>
+        <MyGazers />
+        <MintedGazers />
       </Flex>
-    </Flex>
+    </ApolloProvider>
   );
 };
