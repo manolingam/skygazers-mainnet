@@ -28,6 +28,7 @@ import {
 
 import SKYGAZER_ABI from '../abi/SkyGazer.json';
 import Icons from '@/Icons';
+import { Filter } from '@/components/Filter';
 
 const ITEMS_PER_PAGE = 51;
 
@@ -178,6 +179,7 @@ export const Mint = () => {
 
   const { gazersRemaining, nextPrice } = useCurveSaleMinter();
 
+  const [filteredGazers, setFilteredGazers] = useState(SKYGAZERS);
   const [selectedGazers, setSelectedGazers] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -199,11 +201,11 @@ export const Mint = () => {
   };
 
   useEffect(() => {
-    cropRecords(SKYGAZERS);
-  }, [currentPage]);
+    cropRecords(filteredGazers);
+  }, [currentPage, filteredGazers]);
 
   useEffect(() => {
-    cropRecords(SKYGAZERS, 1);
+    cropRecords(filteredGazers, 1);
   }, []);
 
   return (
@@ -267,7 +269,8 @@ export const Mint = () => {
         >
           show cart ({selectedGazers.length})
         </Button>
-        <Divider h='1px' w='100%' bg='#59342b' my='2rem' />
+        <Filter setFilteredGazers={setFilteredGazers} />
+        <Divider h='1px' w='100%' bg='#59342b' my='1rem' />
         <Stat>
           <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
             current price / gazer
@@ -276,7 +279,7 @@ export const Mint = () => {
             {nextPrice} ETH
           </StatNumber>
         </Stat>
-        <Stat mt='1rem'>
+        <Stat my='1rem'>
           <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
             gazers left at current price
           </StatLabel>
