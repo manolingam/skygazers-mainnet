@@ -34,8 +34,8 @@ const Gazer = ({ item, router }) => {
     >
       <ChakraImage
         src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${item.tokenId}_660.jpeg`}
-        w='250px'
-        mr='20px'
+        w={{ lg: '250px', sm: '100%' }}
+        mr={{ lg: '20px', sm: '0' }}
       />
       <Flex direction='column'>
         <Text
@@ -181,10 +181,23 @@ export const MyGazers = () => {
       borderBottom='1px solid #FF5C00'
       mb='4rem'
     >
-      <Text textTransform='uppercase' color='white' fontSize='34px'>
+      <Text
+        textTransform='uppercase'
+        color='white'
+        fontSize={{ lg: '34px', sm: '20px' }}
+        w={{ sm: '254px', lg: 'auto' }}
+        textAlign='center'
+      >
         Welcome Traveller
       </Text>
-      <Text fontSize='16px' color='#59342B' fontFamily='nunitoBold'>
+      <Text
+        fontSize='16px'
+        color='#59342B'
+        fontFamily='nunitoBold'
+        w={{ sm: '320px' }}
+        textAlign='center'
+        mt='15px'
+      >
         Please connect you wallet for identification.
       </Text>
     </Flex>

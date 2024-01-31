@@ -113,7 +113,7 @@ export const Cart = ({
         <ModalOverlay />
 
         {txStateLevel == 1 && (
-          <ModalContent minH='450px'>
+          <ModalContent minH='450px' mx={{ sm: '2rem', lg: '0' }}>
             <ModalHeader
               fontFamily='gatwick'
               textAlign='center'
@@ -124,12 +124,17 @@ export const Cart = ({
             </ModalHeader>
 
             <ModalBody>
-              <SimpleGrid columns='2' gap='6'>
+              <SimpleGrid
+                columns={{ lg: '2', sm: '1' }}
+                gap={{ lg: '6', sm: '0' }}
+                placeItems='center'
+              >
                 {selectedGazers.map((gazerIndex, i) => {
                   return (
                     <Flex
                       key={gazerIndex}
                       direction='column'
+                      alignItems='center'
                       mb='2rem'
                       pb='5px'
                       borderBottom='2px solid #FF5C00'
@@ -138,7 +143,7 @@ export const Cart = ({
                       <Flex position='relative' mb='10px'>
                         <ChakraImage
                           src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${gazerIndex}_660.jpeg`}
-                          w='100%'
+                          w={{ lg: '100%', sm: '200px' }}
                         />
                         <Button
                           position='absolute'
@@ -160,6 +165,7 @@ export const Cart = ({
                         </Button>
                       </Flex>
                       <Flex
+                        w='100%'
                         direction='row'
                         alignItems='baseline'
                         justifyContent='space-between'
@@ -188,13 +194,17 @@ export const Cart = ({
             <ModalFooter
               display='flex'
               flexDirection='column'
+              mx='auto'
               fontFamily='gatwick'
+              p='0'
+              mb='2rem'
+              w={{ lg: '100%', sm: '200px' }}
             >
               <Text
                 color='#59342b'
                 mb='1rem'
                 fontFamily='gatwickBold'
-                fontSize='20px'
+                fontSize={{ lg: '20px', sm: '16px' }}
               >
                 Total: {cartTotal && utils.formatEther(cartTotal)} ETH
               </Text>
@@ -216,13 +226,13 @@ export const Cart = ({
               )}
 
               <Checkbox
-                mb='10px'
+                mb='2rem'
                 isChecked={termsChecked}
                 onChange={() => {
                   setTermsChecked(!termsChecked);
                 }}
               >
-                <Text color='#59342b' fontSize='14px'>
+                <Text color='#59342b' fontSize={{ lg: '14px', sm: '8px' }}>
                   {' '}
                   I agree to terms and conditions
                 </Text>
@@ -231,7 +241,7 @@ export const Cart = ({
               <Button
                 bg='#5DE2A2'
                 color='white'
-                w='250px'
+                w={{ lg: '250px', sm: '200px' }}
                 h='60px'
                 borderRadius='30px'
                 fontSize='16px'
@@ -266,7 +276,7 @@ export const Cart = ({
         )}
 
         {txStateLevel == 2 && (
-          <ModalContent minH='550px' px='4rem' py='4rem'>
+          <ModalContent minH='550px' py='4rem' mx={{ sm: '2rem', lg: '0' }}>
             <ModalBody
               display='flex'
               flexDirection='column'
@@ -290,7 +300,7 @@ export const Cart = ({
         )}
 
         {txStateLevel == 3 && (
-          <ModalContent minH='550px' px='4rem' py='4rem'>
+          <ModalContent minH='550px' py='4rem' mx={{ sm: '2rem', lg: '0' }}>
             <ModalBody
               display='flex'
               flexDirection='column'
@@ -327,7 +337,7 @@ export const Cart = ({
         )}
 
         {txStateLevel == 4 && (
-          <ModalContent minH='550px' px='4rem' py='4rem'>
+          <ModalContent minH='550px' mx={{ sm: '2rem', lg: '0' }} py='4rem'>
             <ModalBody
               display='flex'
               flexDirection='column'

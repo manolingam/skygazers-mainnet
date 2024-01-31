@@ -19,7 +19,7 @@ export const StoryEditor = ({ editMode, setTitle, title, setIntro, intro }) => {
         value={title}
         placeholder='Story title here..'
         mb='1rem'
-        fontSize='42px'
+        fontSize={{ lg: '42px', sm: '26px' }}
         fontFamily='gatwickBold'
         color='#59342B'
         isReadOnly={!editMode}
@@ -27,7 +27,7 @@ export const StoryEditor = ({ editMode, setTitle, title, setIntro, intro }) => {
       />
       <Textarea
         maxH='400px'
-        h={editMode ? '400px' : '0'}
+        h={editMode ? '400px' : '196px'}
         border={
           editMode ? '2px solid rgba(89, 52, 43, 1)' : '2px solid transparent'
         }
@@ -42,7 +42,7 @@ export const StoryEditor = ({ editMode, setTitle, title, setIntro, intro }) => {
         resize='none'
         value={intro}
         placeholder='Story intro here..'
-        fontSize='24px'
+        fontSize={{ lg: '24px', sm: '18px' }}
         fontFamily='gatwick'
         color='#59342B'
         isReadOnly={!editMode}

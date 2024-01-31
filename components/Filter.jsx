@@ -173,11 +173,11 @@ export const Filter = ({ setFilteredGazers }) => {
 
   return (
     <Flex
-      w='100%'
       direction='column'
       alignItems='center'
       justifyContent='center'
-      mt='1rem'
+      mt={{ lg: '1rem', sm: '0' }}
+      mx='auto'
     >
       <Accordion w='100%' allowToggle>
         <AccordionItem outline='none' border='none'>
@@ -198,7 +198,7 @@ export const Filter = ({ setFilteredGazers }) => {
                 filter & sort
               </Text>
             </AccordionButton>
-            <Text
+            {/* <Text
               fontFamily='nunito'
               fontSize='12px'
               cursor='pointer'
@@ -212,7 +212,7 @@ export const Filter = ({ setFilteredGazers }) => {
               }}
             >
               reset filter
-            </Text>
+            </Text> */}
           </Stack>
 
           <AccordionPanel pb={4}>

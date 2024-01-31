@@ -1,6 +1,6 @@
 'use client';
 
-import { Flex, Button } from '@chakra-ui/react';
+import { Flex, Button, Divider } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -10,7 +10,13 @@ import StarterKit from '@tiptap/starter-kit';
 import Text from '@tiptap/extension-text';
 import Underline from '@tiptap/extension-underline';
 
-export const MarkdownEditor = ({ setBody, body, editMode, ipfsHash }) => {
+export const MarkdownEditor = ({
+  setBody,
+  body,
+  editMode,
+  ipfsHash,
+  windowWidth
+}) => {
   const [loading, setLoading] = useState(false);
 
   const editor = useEditor({
@@ -38,16 +44,19 @@ export const MarkdownEditor = ({ setBody, body, editMode, ipfsHash }) => {
 
   return (
     <>
+      {windowWidth < 700 && !editMode && (
+        <Divider h='3px' w='100%' bg='rgba(221, 181, 152, 0.5)' my='10px' />
+      )}
       {body ? (
         <Flex
           direction='column'
           border={editMode ? '2px solid #59342B' : '2px solid transparent'}
           borderRadius='2px'
           resize='none'
-          w='70%'
+          w={{ lg: '70%', sm: '100%' }}
           h='700px'
-          mt='1rem'
           p='1rem'
+          mt='1rem'
           fontSize='18px'
           fontFamily='nunito'
           color='#59342B'
@@ -95,15 +104,6 @@ export const MarkdownEditor = ({ setBody, body, editMode, ipfsHash }) => {
               >
                 U
               </Button>
-              {/* <Button
-            bg='transparent'
-            _hover={{ bg: 'transparent' }}
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 1 }).run()
-            }
-          >
-            Title
-          </Button> */}
             </Flex>
           )}
           <EditorContent editor={editor} />
@@ -111,11 +111,12 @@ export const MarkdownEditor = ({ setBody, body, editMode, ipfsHash }) => {
       ) : ipfsHash ? (
         <Button
           border='1px solid'
-          color='#FF5C00'
+          color='rgba(89, 52, 43, 1)'
           py='25px'
           w='250px'
           h='60px'
-          mt='2rem'
+          mt='1rem'
+          mx={{ sm: 'auto', lg: '0' }}
           borderRadius='30px'
           fontSize='16px'
           fontFamily='gatwickBold'
@@ -124,7 +125,7 @@ export const MarkdownEditor = ({ setBody, body, editMode, ipfsHash }) => {
           onClick={() => fetchStory()}
           isLoading={loading}
         >
-          Fetch Story
+          Load full story
         </Button>
       ) : (
         editMode && (
@@ -134,7 +135,7 @@ export const MarkdownEditor = ({ setBody, body, editMode, ipfsHash }) => {
             bg='transparent'
             borderRadius='2px'
             resize='none'
-            w='70%'
+            w={{ lg: '70%', sm: '100%' }}
             h='700px'
             mt='1rem'
             p='1rem'

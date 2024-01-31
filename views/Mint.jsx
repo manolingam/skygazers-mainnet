@@ -187,6 +187,16 @@ export const Mint = () => {
   const [currentItems, setCurrentItems] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [windowWidth, setWindowWidth] = useState('');
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    window.removeEventListener('resize', () => {});
+    window.addEventListener('resize', (e) => {
+      setWindowWidth(window.innerWidth);
+    });
+  }, []);
+
   const paginate = (_items, _pageNumber) => {
     _pageNumber ? setCurrentPage(_pageNumber) : null;
     const indexOfLastRecord = currentPage * ITEMS_PER_PAGE;
@@ -211,7 +221,7 @@ export const Mint = () => {
   return (
     <Flex
       minH='100vh'
-      direction='row'
+      direction={{ lg: 'row', sm: 'column-reverse' }}
       alignItems='flex-start'
       pb='4rem'
       px={{ lg: '7.5vw', sm: '1rem' }}
@@ -238,8 +248,16 @@ export const Mint = () => {
           setCurrentPage={setCurrentPage}
         />
       </Flex>
-      <Flex direction='column'>
-        {!address && (
+
+      <Flex
+        w={{ lg: 'auto', sm: '100%' }}
+        direction={{ lg: 'column', sm: 'row-reverse' }}
+        alignItems={{ sm: 'center', lg: 'start' }}
+        justifyContent='space-between'
+        my={{ sm: '1rem', lg: '0' }}
+        position='sticky'
+      >
+        {!address && windowWidth > 700 && (
           <Flex w='100%' bg='#DDB59866' p='2rem' mb='2rem'>
             <Text
               fontFamily='nunitoBold'
@@ -251,14 +269,16 @@ export const Mint = () => {
             </Text>
           </Flex>
         )}
+
         <Button
           border='1px solid'
           color='#FF5C00'
-          py='25px'
-          w='250px'
-          h='60px'
+          py={{ lg: '25px', sm: '10px' }}
+          px='25px'
+          w={{ lg: '250px', sm: '75px' }}
+          h={{ lg: '60px', sm: '36px' }}
           borderRadius='30px'
-          fontSize='16px'
+          fontSize={{ lg: '16px', sm: '14px' }}
           fontFamily='gatwickBold'
           _hover={{ opacity: '0.8' }}
           bg='transparent'
@@ -267,27 +287,51 @@ export const Mint = () => {
             setIsCartOpen(true);
           }}
         >
-          show cart ({selectedGazers.length})
+          {windowWidth > 700 && 'show cart'} {selectedGazers.length}{' '}
+          {windowWidth < 700 && (
+            <ChakraImage src='/cart_icon.png' w='17px' h='14px' ml='5px' />
+          )}
         </Button>
         <Filter setFilteredGazers={setFilteredGazers} />
-        <Divider h='1px' w='100%' bg='#59342b' my='1rem' />
+
+        {windowWidth > 700 && (
+          <Divider h='1px' w='100%' bg='#59342b' my='1rem' />
+        )}
+
         <Stat>
-          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
+          <StatLabel
+            fontSize={{ lg: '14px', sm: '10px' }}
+            color='#59342B'
+            fontFamily='nunito'
+          >
             current price / gazer
           </StatLabel>
-          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
+          <StatNumber
+            fontSize={{ lg: '20px', sm: '16px' }}
+            color='#59342B'
+            fontFamily='gatwickBold'
+          >
             {nextPrice} ETH
           </StatNumber>
         </Stat>
-        <Stat my='1rem'>
-          <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
-            gazers left at current price
-          </StatLabel>
-          <StatNumber fontSize='20px' color='#59342B' fontFamily='gatwickBold'>
-            {gazersRemaining}
-          </StatNumber>
-        </Stat>
-        <Divider h='1px' w='100%' bg='#59342b' />
+
+        {windowWidth > 700 && (
+          <Stat my='1rem'>
+            <StatLabel fontSize='14px' color='#59342B' fontFamily='nunito'>
+              gazers left at current price
+            </StatLabel>
+            <StatNumber
+              fontSize='20px'
+              color='#59342B'
+              fontFamily='gatwickBold'
+            >
+              {gazersRemaining}
+            </StatNumber>
+          </Stat>
+        )}
+
+        {windowWidth > 700 && <Divider h='1px' w='100%' bg='#59342b' />}
+
         <Cart
           isCartOpen={isCartOpen}
           selectedGazers={selectedGazers}

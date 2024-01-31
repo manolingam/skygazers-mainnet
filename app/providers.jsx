@@ -1,6 +1,6 @@
 'use client';
 
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme, defineStyle } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import Fonts from '@/Fonts';
@@ -25,7 +25,31 @@ const baseStyle = definePartsStyle((props) => ({
   }
 }));
 
-const switchTheme = defineMultiStyleConfig({ baseStyle });
+const sizes = {
+  xl: baseStyle,
+  lg: baseStyle,
+  md: baseStyle,
+  sm: definePartsStyle({
+    container: defineStyle({
+      w: '26px'
+    }),
+    track: defineStyle({
+      backgroundColor: 'white',
+      alignItems: 'center',
+      border: '1px solid rgba(255, 92, 0, 1)',
+      _checked: {
+        bg: 'white'
+      }
+    }),
+    thumb: defineStyle({
+      backgroundColor: 'rgba(255, 92, 0, 1)',
+      w: '8px',
+      h: '8px'
+    })
+  })
+};
+
+const switchTheme = defineMultiStyleConfig({ sizes });
 
 const breakpoints = {
   sm: '320px',

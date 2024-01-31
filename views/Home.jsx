@@ -16,6 +16,7 @@ export const Home = () => {
         fontFamily='gatwick'
         justifyContent='space-between'
         pb='4rem'
+        pt='2rem'
         px={{ lg: '7.5vw', sm: '1rem' }}
       >
         <MyGazers />

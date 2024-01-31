@@ -9,7 +9,7 @@ import {
   Box,
   useToast
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useAccount, useContractRead, useNetwork } from 'wagmi';
@@ -42,6 +42,16 @@ export const GazerDetail = ({ params }) => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const toast = useToast();
+
+  const [windowWidth, setWindowWidth] = useState('');
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    window.removeEventListener('resize', () => {});
+    window.addEventListener('resize', (e) => {
+      setWindowWidth(window.innerWidth);
+    });
+  }, []);
 
   const { data: owner } = useContractRead({
     address: SKYGAZERS_NFT_CONTRACTS[chain?.id],
@@ -110,12 +120,19 @@ export const GazerDetail = ({ params }) => {
   };
 
   return (
-    <Flex direction='column' px={{ lg: '7.5vw', sm: '1rem' }} pb='4rem'>
-      <Box cursor='pointer' onClick={() => router.back()}>
-        <Icons.ArrowLeftNav />
-      </Box>
+    <Flex
+      direction='column'
+      px={{ lg: '7.5vw', sm: '1rem' }}
+      pb='4rem'
+      pt={{ sm: '1rem' }}
+    >
+      {windowWidth > 700 && (
+        <Box cursor='pointer' onClick={() => router.back()}>
+          <Icons.ArrowLeftNav />
+        </Box>
+      )}
 
-      <SimpleGrid columns='2' mt='2rem'>
+      <SimpleGrid columns={{ lg: 2, sm: 1 }} mt={{ lg: '2rem', sm: '1rem' }}>
         {!address && (
           <MessageNote
             message={
@@ -133,6 +150,7 @@ export const GazerDetail = ({ params }) => {
                   setEditMode={setEditMode}
                   storyLoading={storyLoading}
                   storyError={storyError}
+                  windowWidth={windowWidth}
                 />
                 <Divider
                   h='3px'
@@ -143,11 +161,19 @@ export const GazerDetail = ({ params }) => {
                 />
               </>
             )}
+
+            {windowWidth < 700 && (
+              <ChakraImage
+                src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${params.id}_660.jpeg`}
+                w='350px'
+              />
+            )}
+
             <Text
-              fontSize='14px'
+              fontSize={{ lg: '14px', sm: '10px' }}
               fontFamily='gatwickBold'
               color='#59342B'
-              mb='10px'
+              my='10px'
             >
               # {params.id} | Owned by{' '}
               <ChakraLink
@@ -180,11 +206,13 @@ export const GazerDetail = ({ params }) => {
           </Flex>
         )}
 
-        <ChakraImage
-          src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${params.id}_660.jpeg`}
-          w='600px'
-          ml='80px'
-        />
+        {windowWidth > 700 && (
+          <ChakraImage
+            src={`${process.env.NEXT_PUBLIC_AWS_BASE_URL}/images/${params.id}_660.jpeg`}
+            w='600px'
+            ml='80px'
+          />
+        )}
       </SimpleGrid>
 
       {address && !storyLoading && (
@@ -194,6 +222,7 @@ export const GazerDetail = ({ params }) => {
             editMode={editMode}
             setBody={setBody}
             body={body}
+            windowWidth={windowWidth}
           />
 
           {(editMode || body) && (
@@ -207,6 +236,7 @@ export const GazerDetail = ({ params }) => {
               fontFamily='gatwickBold'
               _hover={{ opacity: '0.8' }}
               my='2rem'
+              mx={{ sm: 'auto', lg: '0' }}
               isDisabled={
                 !editMode ||
                 !title ||

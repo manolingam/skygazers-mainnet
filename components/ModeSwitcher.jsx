@@ -4,26 +4,38 @@ export const ModeSwitcher = ({
   editMode,
   setEditMode,
   storyLoading,
-  storyError
+  storyError,
+  windowWidth
 }) => {
   return (
     <Flex direction='row' alignItems='center'>
       <Text
-        fontSize='14px'
+        fontSize={{ lg: '14px', sm: '10px' }}
         fontFamily='gatwickBold'
         color='#59342B'
         textTransform='uppercase'
       >
         Preview
       </Text>
-      <Switch
-        mx='10px'
-        isChecked={editMode}
-        isDisabled={storyLoading || storyError}
-        onChange={() => setEditMode(!editMode)}
-      />
+
+      {windowWidth < 700 ? (
+        <Switch
+          mx='10px'
+          size='sm'
+          isChecked={editMode}
+          isDisabled={storyLoading || storyError}
+          onChange={() => setEditMode(!editMode)}
+        />
+      ) : (
+        <Switch
+          mx='10px'
+          isChecked={editMode}
+          isDisabled={storyLoading || storyError}
+          onChange={() => setEditMode(!editMode)}
+        />
+      )}
       <Text
-        fontSize='14px'
+        fontSize={{ lg: '14px', sm: '10px' }}
         fontFamily='gatwickBold'
         color='#FF5C00'
         textTransform='uppercase'

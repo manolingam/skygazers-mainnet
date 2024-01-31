@@ -9,7 +9,7 @@ export const WalletButton = () => {
   const { disconnect } = useDisconnect();
   const { open } = useWeb3Modal();
   return (
-    <Flex h='64px' cursor='pointer'>
+    <Flex h='64px'>
       {!address ? (
         <Flex
           direction='column'
@@ -17,18 +17,19 @@ export const WalletButton = () => {
           justifyContent='flex-end'
           ml='auto'
           pt='1rem'
+          cursor='pointer'
+          onClick={() => open()}
         >
           <Flex
             direction='row'
             alignItems='center'
             bg='white'
             borderRadius='0'
-            onClick={() => open()}
             _hover={{ bg: 'transparent' }}
           >
             <Text
               color='#59342B'
-              fontSize='12px'
+              fontSize={{ lg: '12px', sm: '10px' }}
               textTransform='uppercase'
               fontFamily='gatwickBold'
               pb='8px'
@@ -45,16 +46,19 @@ export const WalletButton = () => {
           justifyContent='flex-end'
           ml='auto'
           pt='1rem'
+          cursor='pointer'
+          onClick={() => disconnect()}
         >
           <Flex
             direction='row'
             alignItems='center'
+            ml={{ sm: 'auto', lg: '0' }}
+            mr='1rem'
             bg='white'
             borderRadius='0'
             color='#59342B'
-            fontSize='12px'
+            fontSize={{ lg: '12px', sm: '10px' }}
             textTransform='uppercase'
-            onClick={() => disconnect()}
             _hover={{ bg: 'transparent' }}
           >
             <Text fontFamily='gatwickBold'>0 SST</Text>
@@ -72,7 +76,11 @@ export const WalletButton = () => {
               {getAccountString(address)}
             </Text>
           </Flex>
-          <Divider height='1px' width='321px' bg='rgba(58, 60, 81, 0.25)' />
+          <Divider
+            height='1px'
+            w={{ lg: '300px', sm: '200px' }}
+            bg='rgba(58, 60, 81, 0.25)'
+          />
         </Flex>
       )}
     </Flex>
