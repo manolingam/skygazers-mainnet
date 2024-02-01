@@ -1,4 +1,4 @@
-import { BigNumber, utils } from 'ethers';
+import { BigNumber } from 'ethers';
 
 import priceCurveDroids from '../data/priceCurveDroids.json';
 

@@ -12,7 +12,7 @@ import {
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useAccount, useContractRead, useNetwork } from 'wagmi';
+import { useAccount, useContractRead, useNetwork, useSignMessage } from 'wagmi';
 import axios from 'axios';
 
 import { MarkdownEditor } from '@/components/MarkdownEditor';
@@ -53,6 +53,13 @@ export const GazerDetail = ({ params }) => {
     });
   }, []);
 
+  const { signMessage, isLoading: signaturePending } = useSignMessage({
+    message: `I authorize my wallet ${address} to save my story for Gazer #${params.id}.`,
+    onSuccess(signature) {
+      saveStory(signature);
+    }
+  });
+
   const { data: owner } = useContractRead({
     address: SKYGAZERS_NFT_CONTRACTS[chain?.id],
     abi: SKYGAZER_ABI,
@@ -84,7 +91,7 @@ export const GazerDetail = ({ params }) => {
     enabled: params.id ? true : false
   });
 
-  const saveStory = async () => {
+  const saveStory = async (signature) => {
     setSavingDraft(true);
 
     let storyData = {
@@ -98,7 +105,12 @@ export const GazerDetail = ({ params }) => {
       }
     };
 
-    let { data } = await axios.post('/api/story/save', { storyData });
+    let { data } = await axios.post('/api/story/save', {
+      storyData,
+      signature,
+      address,
+      tokenId: params.id
+    });
 
     setSavingDraft(false);
 
@@ -245,10 +257,12 @@ export const GazerDetail = ({ params }) => {
                 savingDraft ||
                 owner?.toLowerCase() !== address.toLowerCase()
               }
-              isLoading={savingDraft}
-              loadingText='Saving draft..'
+              isLoading={savingDraft || signaturePending}
+              loadingText={
+                signaturePending ? 'Signature pending..' : 'Saving draft..'
+              }
               onClick={() => {
-                saveStory();
+                signMessage();
               }}
             >
               Save draft

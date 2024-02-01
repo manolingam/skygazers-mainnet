@@ -256,6 +256,7 @@ export const Mint = () => {
         justifyContent='space-between'
         my={{ sm: '1rem', lg: '0' }}
         position='sticky'
+        top='0'
       >
         {!address && windowWidth > 700 && (
           <Flex w='100%' bg='#DDB59866' p='2rem' mb='2rem'>
@@ -292,7 +293,11 @@ export const Mint = () => {
             <ChakraImage src='/cart_icon.png' w='17px' h='14px' ml='5px' />
           )}
         </Button>
-        <Filter setFilteredGazers={setFilteredGazers} />
+
+        <Filter
+          setFilteredGazers={setFilteredGazers}
+          windowWidth={windowWidth}
+        />
 
         {windowWidth > 700 && (
           <Divider h='1px' w='100%' bg='#59342b' my='1rem' />
