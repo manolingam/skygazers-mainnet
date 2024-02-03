@@ -1,8 +1,8 @@
-import { GOERLI_SUBGRAPH_URL } from '@/utils/constants';
+import { SUBGRAPH_URL } from '@/utils/constants';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
-export const GOERLI_SUBGRAPH_CLIENT = new ApolloClient({
-  uri: GOERLI_SUBGRAPH_URL,
+export const SUBGRAPH_CLIENT = new ApolloClient({
+  uri: SUBGRAPH_URL,
   cache: new InMemoryCache(),
   defaultOptions: {
     query: {

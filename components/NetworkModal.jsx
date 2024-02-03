@@ -19,7 +19,7 @@ export const NetworkModal = () => {
   const { isLoading, switchNetwork } = useSwitchNetwork();
 
   useEffect(() => {
-    if (chain && chain?.id !== 5) {
+    if (chain && chain?.id !== 1) {
       setIsOpen(true);
     } else {
       setIsOpen(false);
@@ -51,7 +51,7 @@ export const NetworkModal = () => {
             fontFamily='gatwick'
             mb='1.5rem'
           >
-            Skygazers lives on Goerli.
+            Skygazers lives on Mainnet.
           </Text>
           <Text
             color='rgba(89, 52, 43, 1)'
@@ -73,7 +73,7 @@ export const NetworkModal = () => {
             _hover={{ opacity: '0.8' }}
             isLoading={isLoading}
             onClick={() => {
-              switchNetwork?.(5);
+              switchNetwork?.(1);
             }}
           >
             Change network

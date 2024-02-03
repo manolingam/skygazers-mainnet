@@ -1,20 +1,17 @@
-import { useContractRead, useNetwork } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import { useState } from 'react';
-import { formatEther } from 'viem';
-import { utils, ethers, BigNumber } from 'ethers';
+import { utils, ethers } from 'ethers';
 
-import { CURVE_SALE_MINTER_CONTRACTS } from '@/utils/constants';
+import { CURVE_SALE_MINTER_CONTRACT } from '@/utils/constants';
 import CURVE_SALE_MINTER_ABI from '../abi/CurveSaleMinter.json';
 import PRICE_CURVE from '../data/priceCurveDroids.json';
 
 export function useCurveSaleMinter() {
-  const { chain } = useNetwork();
-
   const [gazersRemaining, setGazersRemaining] = useState(0);
   const [nextPrice, setNextPrice] = useState(0);
 
   const {} = useContractRead({
-    address: CURVE_SALE_MINTER_CONTRACTS[chain?.id],
+    address: CURVE_SALE_MINTER_CONTRACT,
     abi: CURVE_SALE_MINTER_ABI,
     functionName: 'p',
     cacheOnBlock: true,
@@ -28,7 +25,7 @@ export function useCurveSaleMinter() {
 
   // returns the current index in this curveminter
   const { data: currentIndex } = useContractRead({
-    address: CURVE_SALE_MINTER_CONTRACTS[chain?.id],
+    address: CURVE_SALE_MINTER_CONTRACT,
     abi: CURVE_SALE_MINTER_ABI,
     functionName: 'currentIndex',
     cacheOnBlock: true,

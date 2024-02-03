@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useNetwork } from 'wagmi';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/navigation';
 import {
@@ -15,15 +14,11 @@ import axios from 'axios';
 import { Pagination } from '@/shared/Pagination';
 import { SkyLoader } from './Skyloader';
 
-import { BLOCKEXPLORE_BASE_URL } from '@/utils/constants';
+import { BLOCKEXPLORE_BASE_URL, ITEMS_PER_PAGE_HOME } from '@/utils/constants';
 import { getAccountString, formatHoursBefore } from '@/utils/helpers';
 import { GetMintedNFTs } from '@/graphql/queries';
 
-const ITEMS_PER_PAGE = 12;
-
 const Gazer = ({ item, router }) => {
-  const { chain } = useNetwork();
-
   return (
     <Flex
       key={item}
@@ -41,7 +36,7 @@ const Gazer = ({ item, router }) => {
           # {item.tokenId} | Owned by{' '}
           <ChakraLink
             textDecoration='underline'
-            href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/address/${item.owner}`}
+            href={`${BLOCKEXPLORE_BASE_URL}/address/${item.owner}`}
           >
             {getAccountString(item.owner || '')}
           </ChakraLink>
@@ -131,14 +126,14 @@ export const MintedGazers = () => {
 
   const paginate = (_items, _pageNumber) => {
     _pageNumber ? setCurrentPage(_pageNumber) : null;
-    const indexOfLastRecord = currentPage * ITEMS_PER_PAGE;
-    const indexOfFirstRecord = indexOfLastRecord - ITEMS_PER_PAGE;
+    const indexOfLastRecord = currentPage * ITEMS_PER_PAGE_HOME;
+    const indexOfFirstRecord = indexOfLastRecord - ITEMS_PER_PAGE_HOME;
     const currentRecords = _items.slice(indexOfFirstRecord, indexOfLastRecord);
     setCurrentItems(currentRecords);
   };
 
   const cropRecords = (_items, _page) => {
-    setTotalPages(Math.ceil(_items.length / ITEMS_PER_PAGE));
+    setTotalPages(Math.ceil(_items.length / ITEMS_PER_PAGE_HOME));
     paginate(_items, _page);
   };
 

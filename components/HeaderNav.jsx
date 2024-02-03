@@ -4,11 +4,8 @@ import {
   Image as ChakraImage,
   Drawer,
   DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton
+  DrawerContent
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { usePathname, useRouter, useParams } from 'next/navigation';

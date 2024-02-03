@@ -6,7 +6,7 @@ import Story from '@/models/story';
 export async function POST(request) {
   const { address } = await request.json();
 
-  const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_COLLECTION}.egk9ihs.mongodb.net/?retryWrites=true&w=majority`;
+  const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_COLLECTION}.tgpcgzx.mongodb.net/?retryWrites=true&w=majority`;
 
   let client;
   let storyRecords;

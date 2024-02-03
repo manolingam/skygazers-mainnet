@@ -19,7 +19,6 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import {
   useContractWrite,
-  useNetwork,
   useWaitForTransaction,
   useAccount,
   useBalance
@@ -27,11 +26,10 @@ import {
 import { BigNumber, utils } from 'ethers';
 
 import Icons from '@/Icons';
-
 import CURVE_SALE_MINTER_ABI from '../abi/CurveSaleMinter.json';
 import {
   BLOCKEXPLORE_BASE_URL,
-  CURVE_SALE_MINTER_CONTRACTS
+  CURVE_SALE_MINTER_CONTRACT
 } from '@/utils/constants';
 import { getAccountString, getPrices } from '@/utils/helpers';
 import { useCurveSaleMinter } from '@/hooks/useCurveSaleMinter';
@@ -43,7 +41,6 @@ export const Cart = ({
   selectedGazers,
   setSelectedGazers
 }) => {
-  const { chain } = useNetwork();
   const { address } = useAccount();
   const { currentIndex } = useCurveSaleMinter();
   const router = useRouter();
@@ -57,7 +54,7 @@ export const Cart = ({
   const [walletBalance, setWalletBalance] = useState(0);
 
   const { write } = useContractWrite({
-    address: CURVE_SALE_MINTER_CONTRACTS[chain?.id],
+    address: CURVE_SALE_MINTER_CONTRACT,
     abi: CURVE_SALE_MINTER_ABI,
     functionName: 'mintItems',
     onError(err) {
@@ -318,7 +315,7 @@ export const Cart = ({
                   Your NFT's are being minted as we speak
                 </Text>
                 <ChakraLink
-                  href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/tx/${txReceipt}`}
+                  href={`${BLOCKEXPLORE_BASE_URL}/tx/${txReceipt}`}
                   isExternal
                   mt='2rem'
                   fontSize='14px'

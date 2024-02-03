@@ -1,27 +1,22 @@
 import mongoose from 'mongoose';
-import pinataSDK from '@pinata/sdk';
 import { NextResponse } from 'next/server';
 import { verifyMessage, createPublicClient, http } from 'viem';
-import { goerli } from 'viem/chains';
+import { mainnet } from 'viem/chains';
+import pinataSDK from '@pinata/sdk';
 
-import { SKYGAZERS_NFT_CONTRACTS } from '@/utils/constants';
 import SKYGAZERS_ABI from '@/abi/SkyGazer.json';
 import Story from '@/models/story';
+import { SKYGAZERS_NFT_CONTRACT } from '@/utils/constants';
 
 const publicClient = createPublicClient({
-  chain: goerli,
+  chain: mainnet,
   transport: http()
 });
 
-const PINATA = new pinataSDK({
-  pinataApiKey: process.env.PINATA_API_KEY,
-  pinataSecretApiKey: process.env.PINATA_API_SECRET
-});
-
-const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_COLLECTION}.egk9ihs.mongodb.net/?retryWrites=true&w=majority`;
-
 export async function POST(request) {
   const { storyData, address, signature, tokenId } = await request.json();
+
+  const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_COLLECTION}.tgpcgzx.mongodb.net/?retryWrites=true&w=majority`;
 
   let client;
 
@@ -33,7 +28,7 @@ export async function POST(request) {
     });
 
     const data = await publicClient.readContract({
-      address: SKYGAZERS_NFT_CONTRACTS[5],
+      address: SKYGAZERS_NFT_CONTRACT,
       abi: SKYGAZERS_ABI,
       functionName: 'ownerOf',
       args: [Number(tokenId)]
@@ -42,6 +37,11 @@ export async function POST(request) {
     const ownerAddress = data;
 
     if (valid && ownerAddress.toLowerCase() === address.toLowerCase()) {
+      const PINATA = new pinataSDK({
+        pinataApiKey: process.env.PINATA_API_KEY,
+        pinataSecretApiKey: process.env.PINATA_API_SECRET
+      });
+
       const pinataData = {
         gazer: `#${storyData.gazer_id.toString()}`,
         title: storyData.story.title,

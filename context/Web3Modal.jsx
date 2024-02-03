@@ -3,7 +3,7 @@
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 
 import { WagmiConfig } from 'wagmi';
-import { goerli, mainnet } from 'viem/chains';
+import { mainnet } from 'viem/chains';
 
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 
@@ -15,7 +15,7 @@ const metadata = {
   icons: ['https://avatars.githubusercontent.com/u/37784886']
 };
 
-const chains = [mainnet, goerli];
+const chains = [mainnet];
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
 // 3. Create modal

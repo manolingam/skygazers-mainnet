@@ -23,21 +23,20 @@ import { SKYGAZERS } from '@/data/traitsMap';
 import { getAccountString } from '@/utils/helpers';
 import {
   BLOCKEXPLORE_BASE_URL,
-  SKYGAZERS_NFT_CONTRACTS
+  SKYGAZERS_NFT_CONTRACT,
+  ITEMS_PER_PAGE_MINT
 } from '@/utils/constants';
 
 import SKYGAZER_ABI from '../abi/SkyGazer.json';
 import Icons from '@/Icons';
 import { Filter } from '@/components/Filter';
 
-const ITEMS_PER_PAGE = 51;
-
 const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
   const { chain } = useNetwork();
   const { address } = useAccount();
 
   const { data: owner, isError } = useContractRead({
-    address: SKYGAZERS_NFT_CONTRACTS[chain?.id],
+    address: SKYGAZERS_NFT_CONTRACT,
     abi: SKYGAZER_ABI,
     functionName: 'ownerOf',
     cacheOnBlock: true,
@@ -121,7 +120,7 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
             minted by{' '}
             <ChakraLink
               textDecoration='underline'
-              href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/address/${owner}`}
+              href={`${BLOCKEXPLORE_BASE_URL}/address/${owner}`}
             >
               {getAccountString(owner || '')}
             </ChakraLink>
@@ -199,14 +198,14 @@ export const Mint = () => {
 
   const paginate = (_items, _pageNumber) => {
     _pageNumber ? setCurrentPage(_pageNumber) : null;
-    const indexOfLastRecord = currentPage * ITEMS_PER_PAGE;
-    const indexOfFirstRecord = indexOfLastRecord - ITEMS_PER_PAGE;
+    const indexOfLastRecord = currentPage * ITEMS_PER_PAGE_MINT;
+    const indexOfFirstRecord = indexOfLastRecord - ITEMS_PER_PAGE_MINT;
     const currentRecords = _items.slice(indexOfFirstRecord, indexOfLastRecord);
     setCurrentItems(currentRecords);
   };
 
   const cropRecords = (_items, _page) => {
-    setTotalPages(Math.ceil(_items.length / ITEMS_PER_PAGE));
+    setTotalPages(Math.ceil(_items.length / ITEMS_PER_PAGE_MINT));
     paginate(_items, _page);
   };
 

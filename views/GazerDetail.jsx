@@ -21,7 +21,7 @@ import { MessageNote } from '@/components/MessageNote';
 import { StoryEditor } from '@/components/StoryEditor';
 
 import {
-  SKYGAZERS_NFT_CONTRACTS,
+  SKYGAZERS_NFT_CONTRACT,
   BLOCKEXPLORE_BASE_URL
 } from '@/utils/constants';
 import { getAccountString } from '@/utils/helpers';
@@ -61,7 +61,7 @@ export const GazerDetail = ({ params }) => {
   });
 
   const { data: owner } = useContractRead({
-    address: SKYGAZERS_NFT_CONTRACTS[chain?.id],
+    address: SKYGAZERS_NFT_CONTRACT,
     abi: SKYGAZER_ABI,
     functionName: 'ownerOf',
     cacheOnBlock: true,
@@ -189,7 +189,7 @@ export const GazerDetail = ({ params }) => {
             >
               # {params.id} | Owned by{' '}
               <ChakraLink
-                href={`${BLOCKEXPLORE_BASE_URL[chain?.id]}/address/${owner}`}
+                href={`${BLOCKEXPLORE_BASE_URL}/address/${owner}`}
                 isExternal
                 textDecoration='underline'
               >
