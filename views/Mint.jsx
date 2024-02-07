@@ -13,7 +13,9 @@ import {
   Divider
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { useContractRead, useNetwork, useAccount } from 'wagmi';
+import { useContractRead, useAccount } from 'wagmi';
+import { createPublicClient, http } from 'viem';
+import { mainnet } from 'viem/chains';
 
 import { Pagination } from '@/shared/Pagination';
 import { Cart } from '../components/Cart';
@@ -31,17 +33,43 @@ import SKYGAZER_ABI from '../abi/SkyGazer.json';
 import Icons from '@/Icons';
 import { Filter } from '@/components/Filter';
 
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http()
+});
+
 const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
-  const { chain } = useNetwork();
   const { address } = useAccount();
 
-  const { data: owner, isError } = useContractRead({
-    address: SKYGAZERS_NFT_CONTRACT,
-    abi: SKYGAZER_ABI,
-    functionName: 'ownerOf',
-    cacheOnBlock: true,
-    args: [SKYGAZERS.indexOf(item)]
-  });
+  const [owner, setOWner] = useState('');
+
+  // const { data: owner, isError } = useContractRead({
+  //   address: SKYGAZERS_NFT_CONTRACT,
+  //   abi: SKYGAZER_ABI,
+  //   functionName: 'ownerOf',
+  //   cacheOnBlock: true,
+  //   args: [SKYGAZERS.indexOf(item)]
+  // });
+
+  const getOwner = async () => {
+    if (item) {
+      try {
+        const data = await publicClient.readContract({
+          address: SKYGAZERS_NFT_CONTRACT,
+          abi: SKYGAZER_ABI,
+          functionName: 'ownerOf',
+          args: [Number(SKYGAZERS.indexOf(item))]
+        });
+        setOWner(data);
+      } catch (err) {
+        setOWner('');
+      }
+    }
+  };
+
+  useEffect(() => {
+    getOwner();
+  }, [item]);
 
   return (
     <Flex key={item} direction='column' mb='2rem'>
@@ -115,7 +143,7 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
         <Text color='#59342b' fontSize='12px' fontFamily='gatwickBold'>
           # {SKYGAZERS.indexOf(item)}
         </Text>
-        {!isError && address ? (
+        {owner ? (
           <Text fontSize='12px' color='#59342B' fontFamily='gatwick'>
             minted by{' '}
             <ChakraLink
@@ -161,7 +189,7 @@ const Gazer = ({ item, selectedGazers, setSelectedGazers }) => {
                 setSelectedGazers((prev) => [...prev, SKYGAZERS.indexOf(item)]);
               }
             }}
-            isDisabled={!address}
+            // isDisabled={!address}
           >
             {selectedGazers.includes(SKYGAZERS.indexOf(item))
               ? 'remove from cart'
